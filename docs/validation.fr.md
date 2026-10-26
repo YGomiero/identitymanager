@@ -1,4 +1,4 @@
-# Validation de la version 1.0.0
+# Validation de la version 1.0.1
 
 [English](validation.en.md) — Contrôles du 26 octobre 2026.
 

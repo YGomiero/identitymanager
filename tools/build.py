@@ -39,7 +39,7 @@ sha256=hashlib.sha256(data).hexdigest();sha384=hashlib.sha384(data).hexdigest();
 feed=f'''<?xml version="1.0" encoding="utf-8"?>
 <updates><update>
 <name>Identity Manager</name><description>External sign-in and Joomla identity provider</description>
-<element>pkg_identitymanager</element><type>package</type><version>{VERSION}</version>
+<element>pkg_identitymanager</element><type>package</type><client>site</client><version>{VERSION}</version>
 <infourl title="Identity Manager">{REPO}/releases/tag/{VERSION}</infourl>
 <downloads><downloadurl type="full" format="zip">{REPO}/releases/download/{VERSION}/{filename}</downloadurl></downloads>
 <tags><tag>stable</tag></tags><maintainer>Yann Gomiero</maintainer><maintainerurl>{REPO}</maintainerurl>
@@ -47,6 +47,6 @@ feed=f'''<?xml version="1.0" encoding="utf-8"?>
 <sha256>{sha256}</sha256><sha384>{sha384}</sha384><sha512>{sha512}</sha512>
 </update></updates>
 '''
-(DIST/'update.xml').write_text(feed,encoding='utf-8')
-(DIST/'SHA256SUMS').write_text(sha256+'  '+filename+'\n'+hashlib.sha256(feed.encode()).hexdigest()+'  update.xml\n',encoding='ascii')
+(DIST/'update.xml').write_bytes(feed.encode('utf-8'))
+(DIST/'SHA256SUMS').write_bytes((sha256+'  '+filename+'\n'+hashlib.sha256(feed.encode()).hexdigest()+'  update.xml\n').encode('ascii'))
 print(json.dumps({'package':filename,'bytes':len(data),'sha256':sha256,'version':VERSION}))

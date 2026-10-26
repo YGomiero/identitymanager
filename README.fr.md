@@ -14,7 +14,7 @@ Connectez-vous à Joomla avec une identité externe, liez un compte existant ou 
 - Liaison et révocation des identités, journaux, archive CSV, vidage et durée de conservation.
 - Mise à jour Joomla avec empreintes SHA-256, SHA-384 et SHA-512.
 
-Installez **`pkg_identitymanager-1.0.0.zip`**, pas l’archive du code source proposée par GitHub. Le package contient le composant, quatre plugins, les traductions et les dépendances. Composer n’est pas nécessaire sur le site destinataire.
+Installez **`pkg_identitymanager-1.0.1.zip`**, pas l’archive du code source proposée par GitHub. Le package contient le composant, quatre plugins, les traductions et les dépendances. Composer n’est pas nécessaire sur le site destinataire.
 
 ## Les inscriptions respectent Joomla
 

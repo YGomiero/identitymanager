@@ -1,6 +1,7 @@
 {
   "checked_at": "2026-10-26",
-  "package_sha256": "132ccc14d9c8215fd093273f6d707221e7f5007ccdfb8b731e646e54a3c6bc52",
+  "package_version": "1.0.1",
+  "package_sha256": "01334b5c848022889831010744a1322a9b48f2a60873c4c5d1c7d7395ea281d1",
   "stable_2.4.4": {
     "encoding": {
       "total": 36,

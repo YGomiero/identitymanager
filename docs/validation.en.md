@@ -1,4 +1,4 @@
-# Version 1.0.0 validation
+# Version 1.0.1 validation
 
 [Français](validation.fr.md) — Checks performed on 26 October 2026.
 
