@@ -39,7 +39,8 @@ class ClientController extends BaseController
             $clientId = 'joomla-' . bin2hex(random_bytes(8));
         }
 
-        if ((!$id && strlen($secret) < 32) || ($secret !== '' && strlen($secret) < 32)) { throw new \RuntimeException(Text::_('COM_IDENTITYMANAGER_ERROR_CLIENT_SECRET'), 400); }
+        if ($secret !== '' && strlen($secret) < 32) { throw new \RuntimeException(Text::_('COM_IDENTITYMANAGER_ERROR_CLIENT_SECRET'), 400); }
+        if (!$id && $secret === '') { $secret = bin2hex(random_bytes(32)); }
         foreach ($redirectUris as $uri) { if (!filter_var($uri, FILTER_VALIDATE_URL) || !str_starts_with($uri, 'https://') || str_contains($uri, '#') || parse_url($uri, PHP_URL_USER)) { throw new \RuntimeException(Text::_('COM_IDENTITYMANAGER_ERROR_HTTPS'), 400); } }
         if (!$redirectUris) { throw new \RuntimeException(Text::_('COM_IDENTITYMANAGER_ERROR_HTTPS'), 400); }
         if ($db->setQuery($db->createQuery()->select('COUNT(*)')->from('#__identitymanager_clients')->where('client_id = ' . $db->quote($clientId))->where('id <> ' . $id))->loadResult()) { throw new \RuntimeException(Text::_('COM_IDENTITYMANAGER_ERROR_CLIENT_ID'), 409); }
@@ -55,8 +56,6 @@ class ClientController extends BaseController
 
         if ($secret !== '') {
             $fields['client_secret_encrypted'] = (new TokenEncryptionService())->encrypt($secret);
-        } elseif (!$id) {
-            $fields['client_secret_encrypted'] = (new TokenEncryptionService())->encrypt(bin2hex(random_bytes(24)));
         }
 
         if ($id) {
@@ -74,6 +73,15 @@ class ClientController extends BaseController
             $db->setQuery($query)->execute();
         }
 
+        if (!$id) {
+            // Display once to the creating administrator, never in a URL or log.
+            Factory::getApplication()->getSession()->set('identitymanager.client.created', [
+                'user_id' => (int) Factory::getApplication()->getIdentity()->id,
+                'client_id' => $clientId, 'secret' => $secret, 'expires' => time() + 300,
+            ]);
+            $this->setRedirect(Route::_('index.php?option=com_identitymanager&view=client&layout=credentials', false));
+            return;
+        }
         $this->setRedirect(Route::_('index.php?option=com_identitymanager&view=clients', false), \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_UI_CLIENT_APPLICATION_SAVED_D3526'));
     }
 

@@ -1,4 +1,10 @@
-# Version 1.0.3 validation
+# Version 1.0.4 validation
+
+42 isolated checks and 100 Joomla integration checks passed. New scenarios cover last-provider removal, disabled alternatives, local password proof, attempt limiting, POST/CSRF, generated credentials and one-time display, and guided Joomla provider saving while preserving the secret and private CA. Test database mutations are rolled back. Unlink, profile and Joomla configuration screens were checked in the browser on the local site.
+
+The live Joomla-to-Joomla flow and logout back to the home page were then replayed successfully. Joomla’s retained relink return is cleared without changing unrelated login destinations. The final package is installed on all three local sites with accounts and settings preserved.
+
+## Version 1.0.3 validation
 
 42 isolated checks and 65 Joomla integration checks passed. A real GitHub return followed by a repeated callback during relinking was verified in the browser: the client login form is displayed without a session error or looping external sign-in buttons. Tests cover confirmation by the original account, rejection of another account, expiration and rejection without a valid flow. The update preserves existing accounts and settings. The deliberately unlinked GitHub identity remains pending local confirmation.
 

@@ -16,6 +16,25 @@ use Yann\Component\IdentityManager\Site\Provider\OidcProvider;
 
 class AuthService
 {
+    /** Joomla reuses login form data for logout: discard only our completed return. */
+    public function clearRelinkReturn(): void
+    {
+        $app = Factory::getApplication();
+        $isRelink = static function ($return): bool {
+            if (!is_string($return)) { return false; }
+            parse_str((string) parse_url($return, PHP_URL_QUERY), $query);
+            return ($query['option'] ?? '') === 'com_identitymanager' && ($query['task'] ?? '') === 'auth.resumeRelink';
+        };
+        $data = $app->getUserState('users.login.form.data', []);
+        if (is_array($data) && $isRelink($data['return'] ?? null)) {
+            unset($data['return']);
+            $app->setUserState('users.login.form.data', $data);
+        }
+        if ($isRelink($app->getUserState('users.login.form.return'))) {
+            $app->setUserState('users.login.form.return', null);
+        }
+    }
+
     public function getProvider(string $alias): ?array
     {
         $db = Factory::getContainer()->get('DatabaseDriver');

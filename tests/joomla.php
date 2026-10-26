@@ -153,5 +153,6 @@ try{
  rejects(fn()=>$controller->clear(),'Log purge without CSRF rejected');
  $app->input->post->set(Session::getFormToken(),1);$app->loadIdentity($member);rejects(fn()=>$controller->clear(),'Log purge by ordinary member rejected');
  $app->loadIdentity($admin);$app->input->post->set(Session::getFormToken(),1);$controller->clear();check((int)$db->setQuery('SELECT COUNT(*) FROM #__identitymanager_logs')->loadResult()===0,'Authorized log purge succeeds');
+ require __DIR__.'/connection-removal.php';
  echo "$count Joomla integration checks passed; transaction rolled back.\n";
 }finally{$db->transactionRollback();}

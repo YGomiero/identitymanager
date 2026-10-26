@@ -79,6 +79,26 @@ class ProviderController extends BaseController
         ];
 
         $decoded = json_decode((string) $fields['options_json']);
+        if ($input->getCmd('setup') === 'joomla') {
+            $existingOptions = [];
+            $hasSecret = false;
+            if ($id) {
+                $db->setQuery($db->createQuery()->select('options_json, client_secret_encrypted')->from($db->quoteName('#__identitymanager_providers'))->where('id = ' . $id));
+                $existing = $db->loadObject();
+                if (!$existing) { throw new \RuntimeException(Text::_('COM_IDENTITYMANAGER_ERROR_PROVIDER_OPTIONS'), 404); }
+                $existingOptions = json_decode($existing->options_json, true) ?: [];
+                $hasSecret = !empty($existing->client_secret_encrypted);
+            }
+            if (trim($fields['client_id']) === '' || ($secret === '' && !$hasSecret) || ($secret !== '' && strlen($secret) < 32)) {
+                throw new \RuntimeException(Text::_('COM_IDENTITYMANAGER_ERROR_JOOMLA_CREDENTIALS'), 400);
+            }
+            try {
+                $fields = array_replace($fields, \Yann\Component\IdentityManager\Administrator\Service\JoomlaSetup::providerFields($input->getString('joomla_site'), $existingOptions));
+            } catch (\RuntimeException $e) {
+                throw new \RuntimeException(Text::_('COM_IDENTITYMANAGER_ERROR_JOOMLA_URL'), 400);
+            }
+            $decoded = json_decode($fields['options_json']);
+        }
         if (!is_object($decoded) || !in_array($fields['type'], ['oauth2', 'oidc', 'hybridauth'], true)) { throw new \RuntimeException(Text::_('COM_IDENTITYMANAGER_ERROR_PROVIDER_OPTIONS'), 400); }
         $icon = trim((string) $input->get('icon_url', '', 'raw'));
         if ($icon !== '' && !\Yann\Component\IdentityManager\Site\Service\ProviderIcon::validUrl($icon)) { throw new \RuntimeException(Text::_('COM_IDENTITYMANAGER_ERROR_ICON_URL'), 400); }

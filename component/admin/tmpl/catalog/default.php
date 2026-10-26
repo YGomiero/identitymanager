@@ -19,6 +19,13 @@ $presets = $definitionService->getDefinitions();
 </div>
 
 <div class="card mb-3">
+    <div class="card-body">
+        <h3 class="h5"><?php echo \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_JOOMLA_CONNECT'); ?></h3>
+        <p><?php echo \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_JOOMLA_INTRO'); ?></p>
+        <a class="btn btn-primary" href="<?php echo Route::_('index.php?option=com_identitymanager&view=provider&template=joomla'); ?>"><?php echo \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_UI_CONFIGURE_792C8'); ?></a>
+    </div>
+</div>
+<div class="card mb-3">
     <div class="card-header"><strong><?php echo \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_UI_MANUAL_PROVIDER_BB12E'); ?></strong></div>
     <div class="card-body d-flex justify-content-between align-items-center">
         <div>

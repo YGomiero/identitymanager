@@ -4,7 +4,7 @@
   <author>Yann Gomiero</author>
   <creationDate>2026-10</creationDate>
   <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <description>PLG_IDENTITYMANAGER_HYBRIDAUTH_XML_DESCRIPTION</description>
   <namespace path="src">Yann\Plugin\IdentityManager\Hybridauth</namespace>
   <files>

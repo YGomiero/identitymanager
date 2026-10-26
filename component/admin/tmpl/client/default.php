@@ -44,12 +44,23 @@ $redirectUris = implode("\n", json_decode((string) $client->redirect_uris_json, 
             </label>
         </div>
         <div class="card-body">
-            <p><?php echo \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_SECRET_HELP'); ?></p>
+            <p><?php echo \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_MASTER_SETUP_HELP'); ?></p>
+            <?php if (!\Joomla\CMS\Component\ComponentHelper::getParams('com_identitymanager')->get('idp_enabled', 0)) : ?>
+                <div class="alert alert-warning"><?php echo \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_MASTER_DISABLED_HELP'); ?></div>
+            <?php endif; ?>
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label" for="identitymanager-client-name"><?php echo \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_UI_NAME_709A2'); ?></label>
                     <input class="form-control" id="identitymanager-client-name" name="name" required value="<?php echo htmlspecialchars($client->name, ENT_QUOTES, 'UTF-8'); ?>">
                 </div>
+                <div class="col-12">
+                    <label class="form-label" for="identitymanager-client-redirects"><?php echo \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_UI_REDIRECT_URIS_9842C'); ?></label>
+                    <textarea class="form-control" id="identitymanager-client-redirects" name="redirect_uris" rows="5" required><?php echo htmlspecialchars($redirectUris, ENT_QUOTES, 'UTF-8'); ?></textarea>
+                    <div class="form-text"><?php echo \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_UI_ONE_EXACT_REDIRECT_URI_PER_LINE_BFAED'); ?></div>
+                </div>
+                <div class="col-12"><details <?php echo $client->id ? 'open' : ''; ?>>
+                    <summary><?php echo \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_CLIENT_ADVANCED'); ?></summary>
+                    <div class="row g-3 mt-1">
                 <div class="col-md-6">
                     <label class="form-label" for="identitymanager-client-id"><?php echo \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_UI_CLIENT_ID_A766C'); ?></label>
                     <input class="form-control" id="identitymanager-client-id" name="client_id" value="<?php echo htmlspecialchars($client->client_id, ENT_QUOTES, 'UTF-8'); ?>" placeholder="<?php echo htmlspecialchars(\Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_UI_LEAVE_BLANK_TO_GENERATE_C16DE'), ENT_QUOTES, 'UTF-8'); ?>">
@@ -62,11 +73,8 @@ $redirectUris = implode("\n", json_decode((string) $client->redirect_uris_json, 
                     <label class="form-label" for="identitymanager-client-scope"><?php echo \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_UI_ALLOWED_SCOPE_B33D2'); ?></label>
                     <input class="form-control" id="identitymanager-client-scope" name="scope" value="<?php echo htmlspecialchars($client->scope, ENT_QUOTES, 'UTF-8'); ?>">
                 </div>
-                <div class="col-12">
-                    <label class="form-label" for="identitymanager-client-redirects"><?php echo \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_UI_REDIRECT_URIS_9842C'); ?></label>
-                    <textarea class="form-control" id="identitymanager-client-redirects" name="redirect_uris" rows="5" required><?php echo htmlspecialchars($redirectUris, ENT_QUOTES, 'UTF-8'); ?></textarea>
-                    <div class="form-text"><?php echo \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_UI_ONE_EXACT_REDIRECT_URI_PER_LINE_BFAED'); ?></div>
-                </div>
+                    </div>
+                </details></div>
                 <div class="col-12">
                     <label class="form-check">
                         <input class="form-check-input" type="checkbox" name="trusted" value="1" <?php echo (int) $client->trusted ? 'checked' : ''; ?>>

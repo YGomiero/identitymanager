@@ -121,6 +121,7 @@ class AuthController extends BaseController
                 if (!$app->login(['username' => $user->username, 'password' => ''], ['identitymanager_user_id' => $userId])) {
                     throw new \RuntimeException('COM_IDENTITYMANAGER_ERROR_LOGIN_FAILED');
                 }
+                $auth->clearRelinkReturn();
                 $app->redirect(Route::_('index.php?option=com_identitymanager&view=connections', false));
                 return;
             }
@@ -166,6 +167,7 @@ class AuthController extends BaseController
                 if (!$app->login(['username' => $user->username, 'password' => ''], ['identitymanager_user_id' => $userId])) {
                     throw new \RuntimeException('COM_IDENTITYMANAGER_ERROR_LOGIN_FAILED');
                 }
+            $auth->clearRelinkReturn();
             $app->redirect(Route::_('index.php?option=com_identitymanager&view=connections', false));
         } catch (\Throwable $e) {
             $app->getSession()->clear('identitymanager.hybridauth.started.' . $alias);
@@ -182,6 +184,7 @@ class AuthController extends BaseController
         $auth = new AuthService();
         $pending = $auth->pendingRelink();
         $user = $app->getIdentity();
+        $auth->clearRelinkReturn();
 
         if (!$pending) {
             $this->redirectError('COM_IDENTITYMANAGER_ERROR_RELINK_EXPIRED');
@@ -220,15 +223,27 @@ class AuthController extends BaseController
 
     public function revoke(): void
     {
-        $this->checkToken('request');
+        if ($this->input->getMethod() !== 'POST') {
+            throw new \RuntimeException(Text::_('JERROR_ALERTNOAUTHOR'), 405);
+        }
+        $this->checkToken('post');
         $user = Factory::getApplication()->getIdentity();
 
         if ($user->guest) {
             throw new \RuntimeException(Text::_('JERROR_ALERTNOAUTHOR'), 403);
         }
 
-        $id = $this->input->getInt('id');
-        (new AccountLinkService())->revoke($id, (int) $user->id);
+        $id = $this->input->post->getInt('id');
+        try {
+            (new \Yann\Component\IdentityManager\Site\Service\ConnectionRemovalService())->revoke(
+                $id, (int) $user->id, (string) $this->input->post->get('local_password', '', 'raw')
+            );
+        } catch (\RuntimeException $e) {
+            $allowed = ['COM_IDENTITYMANAGER_ERROR_CONNECTION_NOT_FOUND', 'COM_IDENTITYMANAGER_ERROR_LAST_CONNECTION', 'COM_IDENTITYMANAGER_ERROR_LOCAL_PASSWORD', 'COM_IDENTITYMANAGER_ERROR_UNLINK_WAIT'];
+            $key = in_array($e->getMessage(), $allowed, true) ? $e->getMessage() : 'COM_IDENTITYMANAGER_ERROR_AUTHENTICATION';
+            $this->setRedirect(Route::_('index.php?option=com_identitymanager&view=unlink&id=' . $id, false), Text::_($key), 'warning');
+            return;
+        }
         (new LogService())->write('account_revoked', 'success', 'COM_IDENTITYMANAGER_UI_EXTERNAL_IDENTITY_REVOKED_BY_USER_A9FB2', (int) $user->id);
         $this->setRedirect(Route::_('index.php?option=com_identitymanager&view=connections', false), Text::_('COM_IDENTITYMANAGER_CONNECTION_REVOKED'));
     }

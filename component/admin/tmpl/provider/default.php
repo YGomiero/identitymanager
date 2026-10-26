@@ -53,6 +53,12 @@ $provider = $provider ?: (object) [
 ];
 
 $options = json_decode((string) $provider->options_json, true) ?: [];
+$joomlaSite = \Yann\Component\IdentityManager\Administrator\Service\JoomlaSetup::siteForProvider($provider);
+if (($template === 'joomla' || $joomlaSite !== null) && $app->input->getCmd('mode') !== 'manual') {
+    if (!$provider->id) { $provider->alias = $definitionService->uniqueAlias('joomla'); }
+    require __DIR__ . '/joomla.php';
+    return;
+}
 $adapter = (string) ($options['adapter'] ?? $options['adapter_class'] ?? '');
 $ui = (array) ($options['_ui'] ?? []);
 $isHybridauth = $provider->type === 'hybridauth';

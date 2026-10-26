@@ -1,5 +1,13 @@
 # Changelog / Historique
 
+## 1.0.4 — 2026-10-26
+
+- Confirm self-service unlinking with a protected POST. Removing the last enabled provider requires proof of a working local Joomla password, with a profile link to set one or an option to link another provider. Disabled providers do not count; concurrent removals are serialized per user.
+- Add a guided Joomla provider form: master URL, display name and credentials; generate OIDC endpoints and security settings automatically while preserving existing advanced options.
+- Generate blank new-client credentials correctly and display them once to the creating administrator. Simplify the master form and explain both roles in French and English.
+
+- Clear completed local-account confirmation return URLs so a later normal logout cannot revisit an expired relinking request. Preserve unrelated Joomla return settings.
+
 ## 1.0.3 — 2026-10-26
 
 - Guide first-time linking of an existing email through local sign-in and automatic continuation; expose My external connections in the signed-in login module and profile.

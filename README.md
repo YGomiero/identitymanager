@@ -14,7 +14,7 @@ Sign in to Joomla with an external identity, link an existing account, or create
 - Account linking/revocation, administrator logs, CSV archive, purge and retention settings.
 - Joomla update server with SHA-256, SHA-384 and SHA-512 checksums.
 
-Install **`pkg_identitymanager-1.0.3.zip`**, not GitHub's source-code archive. It contains the component, four plugins, translations and runtime dependencies. Composer is unnecessary on the destination site.
+Install **`pkg_identitymanager-1.0.4.zip`**, not GitHub's source-code archive. It contains the component, four plugins, translations and runtime dependencies. Composer is unnecessary on the destination site.
 
 ## Registration follows Joomla
 

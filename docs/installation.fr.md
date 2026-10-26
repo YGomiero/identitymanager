@@ -4,7 +4,7 @@
 
 ## Installer ou mettre à jour
 
-Sauvegardez les fichiers et la base. Dans Système → Installation → Extensions, installez le ZIP `pkg_identitymanager-1.0.3.zip`. La première installation active les quatre plugins ; une mise à jour conserve leur état. Tous les fournisseurs et le rôle maître sont désactivés par défaut. Activez uniquement les services configurés.
+Sauvegardez les fichiers et la base. Dans Système → Installation → Extensions, installez le ZIP `pkg_identitymanager-1.0.4.zip`. La première installation active les quatre plugins ; une mise à jour conserve leur état. Tous les fournisseurs et le rôle maître sont désactivés par défaut. Activez uniquement les services configurés.
 
 Un **seul package** contient le composant d’administration/site, le plugin système (boutons), le plugin d’authentification (session Joomla), le catalogue Google et le catalogue Hybridauth. Chaque site choisit son rôle dans sa configuration. Installer le package sur un client ne le transforme pas automatiquement en maître.
 
@@ -42,28 +42,20 @@ Utilisez un domaine HTTPS accepté par Google. Les noms locaux tels que `demofr.
 
 ## Relier deux sites Joomla
 
-Sur le **maître**, activez le fournisseur d’identité dans les paramètres du composant. Créez une application cliente avec un identifiant unique, un secret aléatoire d’au moins 32 caractères et l’URL de retour exacte du client. Limitez les autorisations à `openid profile email`. Laissez « Client de confiance » désactivé pour présenter le consentement au membre.
+Le **maître** est un fournisseur d’identité : il authentifie le membre. Le **client** reçoit une preuve de cette identité et ouvre sa propre session, sans recevoir le mot de passe du maître. OpenID Connect ajoute l’identification au protocole OAuth 2.0. Le même package peut remplir les deux rôles.
 
-Le réglage « Adresses e-mail vérifiées » du maître doit rester désactivé sauf si son administrateur garantit que les membres ont réellement vérifié leur adresse. Le client exige cette preuve par défaut ; activer ce réglage sans politique de vérification adéquate affaiblirait la liaison des comptes.
+1. Sur le **client**, ouvrez Fournisseurs → Ajouter → **Se connecter avec les comptes d’un autre site Joomla**. Copiez l’adresse de retour affichée et gardez cette page ouverte.
+2. Sur le **maître**, activez le rôle maître dans les paramètres d’Identity Manager. Dans Applications clientes → Nouvelle application, donnez un nom au site client et collez son adresse de retour exacte. Conservez la demande de consentement, puis enregistrez. Les identifiants laissés vides sont générés automatiquement.
+3. Le maître affiche son adresse, l’identifiant client et le secret. **Copiez le secret avant de quitter cette page : il n’est affiché qu’une fois**, pendant une fenêtre de cinq minutes après la création. Ne le placez jamais dans une URL, une capture publique ou un ticket GitHub.
+4. Revenez au **client**. Saisissez l’adresse HTTPS du maître, le nom du bouton et les deux identifiants. Le favicon est facultatif. Activez puis enregistrez le fournisseur.
 
-Sur le **client**, ajoutez un fournisseur OIDC :
+Les adresses d’autorisation, de jeton et de profil ainsi que le scope et la signature HS256 sont préparés automatiquement. Aucun JSON n’est nécessaire pour une liaison standard. Les paramètres avancés restent accessibles pour modifier une configuration particulière ; les réglages existants, dont une autorité de certification privée, sont conservés.
 
-| Champ | Exemple |
-|---|---|
-| Nom / alias | Mon espace membre / `mon-espace` |
-| Identifiant et secret | Ceux de l’application déclarée sur le maître |
-| Autorisation | `https://maitre.example/?option=com_identitymanager&task=idp.authorize` |
-| Jeton | `https://maitre.example/?option=com_identitymanager&task=idp.token` |
-| Profil | `https://maitre.example/?option=com_identitymanager&task=idp.userinfo` |
-| Émetteur | `https://maitre.example` (sans barre finale) |
-| Scope | `openid profile email` |
-| Options JSON | `{"id_token_alg":"HS256"}` |
+Le client exige une adresse e-mail vérifiée par défaut. Le maître ne doit activer l’attestation d’e-mail vérifié que si l’administrateur garantit que ses membres ont réellement vérifié leur adresse. Ne modifiez pas cette garantie uniquement pour faire disparaître une erreur de connexion. Une adresse déjà présente sur le client demande la confirmation du compte local lorsque la liaison automatique reste désactivée, comme par défaut.
 
-Le maître intégré signe les jetons d’identité avec le secret propre au client (HS256). Ne configurez pas de JWKS pour ce maître. Pour un autre fournisseur OIDC avec signatures RSA, utilisez RS256 (valeur par défaut) et son adresse JWKS HTTPS. Les jetons d’accès du maître utilisent une clé serveur distincte : un client ne peut pas les fabriquer.
+Le parcours intégré utilise le code d’autorisation avec PKCE S256. Les jetons d’identité utilisent le secret propre au client (HS256) ; les jetons d’accès utilisent une clé serveur distincte. Il s’agit d’un sous-ensemble OIDC, sans certification OpenID ni promesse de compatibilité universelle. Pour un serveur OIDC différent, utilisez le formulaire générique avec les paramètres qu’il fournit ; RS256 et JWKS y sont disponibles.
 
-La découverte est disponible à `https://maitre.example/?option=com_identitymanager&task=idp.discovery`. Les adresses à la racine évitent les redirections automatiques de `index.php` sur les sites utilisant la réécriture d’URL. Les requêtes contenant des secrets ou des jetons ne suivent pas les redirections HTTP.
-
-Pour des certificats privés de développement, ajoutez `"ca_file":"/chemin/autorite-locale.pem"` aux options du client. Le fichier doit être lisible par PHP et contenir l’autorité de confiance appropriée. La vérification du certificat et du nom d’hôte reste active.
+La découverte est disponible à `https://maitre.example/?option=com_identitymanager&task=idp.discovery`. Les adresses à la racine évitent les redirections de `index.php` sur les sites avec réécriture. Les échanges contenant des secrets ne suivent pas de redirection HTTP. Pour une autorité de certification privée, ajoutez `"ca_file":"/chemin/autorite-locale.pem"` aux options avancées du client ; PHP doit pouvoir lire le fichier. La vérification TLS reste active.
 
 ## Icônes et favicons
 
@@ -75,10 +67,10 @@ La page Journal affiche les 100 derniers événements. « Exporter une archive C
 
 La conservation vaut 90 jours par défaut ; configurez 0 pour la désactiver, jusqu’à 3650 jours autrement. Le nettoyage est opportuniste : chaque nouvel événement supprime au maximum 100 anciens enregistrements. Un site sans activité ne purge pas en arrière-plan. Archivez avant le vidage si nécessaire. Les journaux contiennent date, événement, résultat, identifiants internes, fournisseur, IP et navigateur, jamais les mots de passe ni les jetons OAuth. Conservez les archives dans un emplacement protégé et mentionnez ce traitement dans votre information de confidentialité.
 
-Les visiteurs gèrent leurs services à `index.php?option=com_identitymanager&view=connections` (créez un élément de menu de ce type). Délier une identité efface ses jetons enregistrés et bloque cette connexion ; cela ne supprime pas le compte Joomla ni l’autorisation du côté du fournisseur. Conservez un moyen de connexion local avant de retirer le dernier service.
+Les visiteurs gèrent leurs services à `index.php?option=com_identitymanager&view=connections` (un élément de menu est facultatif). Délier une identité efface ses jetons enregistrés et bloque cette connexion ; cela ne supprime pas le compte Joomla ni l’autorisation du côté du fournisseur. Avant une déliaison, une page de confirmation vérifie les autres fournisseurs liés et activés. S’il ne reste que ce fournisseur, vous devez prouver que vous connaissez votre mot de passe Joomla local. Vous pouvez le définir dans votre profil pendant que vous êtes connecté, puis revenir à « Mes connexions externes », ou lier un autre fournisseur. Un mot de passe aléatoire créé automatiquement ne suffit pas. Si la connexion Joomla par mot de passe est désactivée, un autre fournisseur est nécessaire. Les essais de mot de passe sont limités ; la confirmation utilise une requête POST protégée. La révocation administrative reste possible pour une intervention de sécurité.
 
-Après une déliaison, une authentification externe réussie ouvre le formulaire de connexion du **site client** pour confirmer le compte local d’origine. Ce formulaire ne propose pas de relancer la connexion externe. Un retour répété ou un second clic reprend cette confirmation pendant dix minutes, sans réutiliser le code OAuth ni réactiver la liaison automatiquement. Si le compte a été créé par un fournisseur, utilisez « Mot de passe perdu ? » pour définir un mot de passe local. Pour simplement quitter le site et revenir avec le même fournisseur, utilisez « Déconnexion ».
+Après une déliaison, une authentification externe réussie ouvre le formulaire de connexion du **site client** pour confirmer le compte local d’origine. Ce formulaire ne propose pas de relancer la connexion externe. Un retour répété ou un second clic reprend cette confirmation pendant dix minutes, sans réutiliser le code OAuth ni réactiver la liaison automatiquement. Si une identité a déjà été déliée avant cette protection et que vous êtes déconnecté, utilisez « Mot de passe perdu ? » pour récupérer un accès local ; cela nécessite la réception du courriel de Joomla. Aucun ancien lien n’est réactivé automatiquement. Pour simplement quitter le site et revenir avec le même fournisseur, utilisez « Déconnexion ».
 
-## Passage du prototype 0.1.0 à 1.0.3
+## Passage du prototype 0.1.0 à 1.0.4
 
 La migration ajoute le support PKCE sans remplacer les données. Les anciens codes d’autorisation ne sont plus utilisables : commencez une nouvelle connexion après la mise à jour. Le rôle maître doit être explicitement activé ; mettez les URL en HTTPS, vérifiez l’émetteur, configurez `HS256` pour un maître Identity Manager et un secret d’au moins 32 caractères. Mettez à jour le maître et ses clients ensemble. Réglez les inscriptions Joomla et Identity Manager selon la politique voulue. Ne restaurez pas des données chiffrées sans la clé `secret` Joomla correspondante.

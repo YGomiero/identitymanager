@@ -1,4 +1,10 @@
-# Validation de la version 1.0.3
+# Validation de la version 1.0.4
+
+42 contrôles isolés et 100 contrôles d’intégration Joomla réussis. Les nouveaux essais couvrent la déliaison du dernier fournisseur, les alternatives désactivées, la preuve du mot de passe local, la limitation des tentatives, POST/CSRF, les identifiants générés et leur affichage unique, ainsi que l’enregistrement du fournisseur Joomla simplifié avec conservation du secret et de l’autorité privée. Les modifications de test sont annulées en base. Les écrans de déliaison, de profil et de configuration Joomla ont été vérifiés dans le navigateur sur le site local.
+
+La connexion réelle Joomla → Joomla et la déconnexion vers l’accueil ont ensuite été rejouées avec succès. Le retour de réassociation conservé par Joomla est nettoyé sans modifier les autres destinations de connexion. Le package final est installé sur les trois sites locaux avec conservation des comptes et réglages.
+
+## Validation de la version 1.0.3
 
 42 contrôles isolés et 65 contrôles d’intégration Joomla réussis. Retour GitHub réel, puis retour répété pendant la réassociation vérifiés dans le navigateur : le formulaire du site client est affiché sans erreur de session et sans bouton externe créant une boucle. Les tests couvrent la confirmation par le compte d’origine, le refus d’un autre compte, l’expiration et le rejet d’un retour sans session valide. Les comptes et réglages existants sont conservés par la mise à jour. La liaison GitHub volontairement déliée reste en attente de confirmation locale.
 

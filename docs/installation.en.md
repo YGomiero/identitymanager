@@ -4,7 +4,7 @@
 
 ## Install and update
 
-Back up files and database, then upload `pkg_identitymanager-1.0.3.zip` through System → Install → Extensions. The first installation enables four plugins; upgrades preserve their enabled state. Providers and the identity-provider role are disabled by default. Enable only configured services.
+Back up files and database, then upload `pkg_identitymanager-1.0.4.zip` through System → Install → Extensions. The first installation enables four plugins; upgrades preserve their enabled state. Providers and the identity-provider role are disabled by default. Enable only configured services.
 
 The **same package** includes the site/administrator component, system buttons plugin, Joomla authentication plugin, Google catalog and Hybridauth catalog. Each site selects its role in configuration. Client installation does not automatically enable the master role.
 
@@ -38,26 +38,20 @@ Use an HTTPS domain accepted by Google. Local `.test` names are unsuitable for p
 
 ## Connect two Joomla sites
 
-On the **master**, explicitly enable the identity provider. Create a client with a unique ID, random secret of at least 32 characters, and exact callback from the receiving site. Use `openid profile email`. Leave “Trusted client” off to show member consent.
+The **master** acts as an identity provider and authenticates the member. The **client** receives proof of that identity and opens its own session without receiving the master password. OpenID Connect adds identity verification to OAuth 2.0. The same package can perform both roles.
 
-Leave the master's “Verified email addresses” setting off unless administrators guarantee genuine email verification for its members. Clients require verified email by default; asserting this without such a policy would undermine account linking.
+1. On the **client**, open Providers → Add → **Sign in with accounts from another Joomla site**. Copy the displayed callback address and keep this page open.
+2. On the **master**, enable the master role in Identity Manager options. Under Client applications → New application, name the client site and paste its exact callback address. Keep consent enabled, then save. Empty credentials are generated automatically.
+3. The master displays its address, client ID and secret. **Copy the secret before leaving: it is displayed once**, within five minutes of creation. Never put it in a URL, public screenshot or GitHub issue.
+4. Return to the **client**. Enter the master HTTPS address, button name and both credentials. The favicon is optional. Enable and save the provider.
 
-On the **client**, configure an OIDC provider:
+Authorization, token and profile endpoints, scope and HS256 settings are prepared automatically. Standard setup needs no JSON editing. Advanced settings remain available for custom configurations, and existing options such as a private certificate authority are preserved.
 
-| Field | Example |
-|---|---|
-| Name / alias | Member portal / `portal` |
-| Client ID and secret | The values registered on the master |
-| Authorization URL | `https://master.example/?option=com_identitymanager&task=idp.authorize` |
-| Token URL | `https://master.example/?option=com_identitymanager&task=idp.token` |
-| UserInfo URL | `https://master.example/?option=com_identitymanager&task=idp.userinfo` |
-| Issuer | `https://master.example` (no trailing slash) |
-| Scope | `openid profile email` |
-| JSON options | `{"id_token_alg":"HS256"}` |
+By default the client requires a verified email. Enable the master’s verified-email assertion only when its administrator guarantees that members have actually verified their addresses. Do not change this guarantee merely to suppress a sign-in error. An email already present on the client requires confirmation of the local account while automatic linking remains disabled, as it is by default.
 
-The bundled master signs ID tokens using the client's shared secret (HS256), without JWKS. For an external RSA-based OIDC provider, use RS256 (default) and its HTTPS JWKS URL. Master access tokens use a separate server-only key, so clients cannot mint them.
+The built-in flow uses authorization codes with PKCE S256. Identity tokens use the client-specific secret (HS256); access tokens use a separate server key. This is a documented OIDC subset, without OpenID certification or universal interoperability claims. For another OIDC server, use the generic form with its supplied settings; RS256 and JWKS are available there.
 
-Discovery is at `https://master.example/?option=com_identitymanager&task=idp.discovery`. Root URLs avoid SEF redirects of `index.php`; requests containing credentials or bearer tokens do not follow HTTP redirects. For private development certificates, add `"ca_file":"/path/local-ca.pem"` to client options. PHP must be able to read the proper trusted CA bundle. Certificate and hostname verification remain enabled.
+Discovery is available at `https://master.example/?option=com_identitymanager&task=idp.discovery`. Root endpoints avoid `index.php` redirects on SEF sites. Credential-bearing exchanges do not follow HTTP redirects. For a private certificate authority, add `"ca_file":"/path/local-ca.pem"` in the client’s advanced options; PHP must be able to read the file. TLS verification remains enabled.
 
 ## Favicons and logos
 
@@ -69,9 +63,9 @@ Logs displays the latest 100 events. Export CSV includes all rows up to the star
 
 Retention defaults to 90 days. Set 0 to disable expiry, or choose up to 3650 days. Cleanup is opportunistic, deleting at most 100 expired rows per new event; there is no background job on an idle site. Archive before clearing if needed. Logs contain timestamps, event/result, internal IDs, provider, IP and browser, never passwords or OAuth tokens. Protect downloaded archives and describe processing in the site's privacy information.
 
-Members manage providers at `index.php?option=com_identitymanager&view=connections`; add a menu item to this view. Unlinking removes stored tokens and disables that external connection, but does not delete the Joomla account or revoke consent at the external provider. Keep a local login method before removing the last identity.
+Members manage providers at `index.php?option=com_identitymanager&view=connections`; a menu item is optional. Unlinking removes stored tokens and disables that external connection, but does not delete the Joomla account or revoke consent at the external provider. Before unlinking, the confirmation screen checks other linked and enabled providers. If this is the last provider, prove knowledge of your local Joomla password. You can set it in your profile while signed in, then return to My external connections, or link another provider. An automatically generated random password hash is not enough. When Joomla password authentication is disabled, another provider is required. Password attempts are rate limited and confirmation requires a protected POST request. Administrative revocation remains available for security interventions.
 
-After unlinking, a successful external authentication opens the **client site** login form to confirm the original local account. This form does not offer another external sign-in. Repeated callbacks or clicks resume that confirmation for ten minutes without exchanging the OAuth code again or automatically restoring the link. If the provider originally created your account, use Forgot your password? to set a local password. Use Log out to leave the site and later return through the same provider.
+After unlinking, a successful external authentication opens the **client site** login form to confirm the original local account. This form does not offer another external sign-in. Repeated callbacks or clicks resume that confirmation for ten minutes without exchanging the OAuth code again or automatically restoring the link. For an identity already unlinked before this protection, a signed-out member can use Forgot your password? to recover local access; Joomla’s recovery email must be deliverable. Existing revoked links are not automatically restored. Use Log out to leave the site and later return through the same provider.
 
 ## Upgrade from prototype 0.1.0
 

@@ -74,12 +74,12 @@ $availableProviders = array_filter($providers, static function ($provider) use (
                     <?php endif; ?>
                 </div>
                 <?php if (!(int) $account->revoked) : ?>
-                    <a class="btn btn-outline-danger" href="<?php echo Route::_('index.php?option=com_identitymanager&task=auth.revoke&id=' . (int) $account->id . '&' . Session::getFormToken() . '=1'); ?>"><?php echo Text::_('COM_IDENTITYMANAGER_REVOKE'); ?></a>
+                    <a class="btn btn-outline-danger" href="<?php echo Route::_('index.php?option=com_identitymanager&view=unlink&id=' . (int) $account->id); ?>"><?php echo Text::_('COM_IDENTITYMANAGER_REVOKE'); ?></a>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>
     </div>
-    <div class="identitymanager-social">
+    <div class="identitymanager-social" id="identitymanager-add-provider">
         <p class="identitymanager-social__title"><?php echo Text::_('COM_IDENTITYMANAGER_LINK_ANOTHER_IDENTITY'); ?></p>
         <?php if ($availableProviders) : ?>
             <div class="identitymanager-social__buttons">
