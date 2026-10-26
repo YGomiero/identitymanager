@@ -14,4 +14,4 @@ Adds validated OIDC signatures, PKCE, consent, one-use login tickets, safer acco
 
 Première version distribuable issue du prototype local 0.1.0 : package commun maître/client, interface et documentation FR/EN, mises à jour, signatures OIDC vérifiées, PKCE, consentement, respect des inscriptions Joomla, liaison sécurisée des comptes, export et nettoyage des journaux, logos et favicons.
 
-Real acceptance flows cover GitHub and Joomla. Google and self-hosted WordPress remain unverified with live services. JED scan findings and limitations are documented separately.
+Real acceptance flows cover GitHub and Joomla. Google and self-hosted WordPress remain unverified with live services.

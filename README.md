@@ -24,6 +24,6 @@ New accounts require **both** Joomla Users → Options → Allow User Registrati
 
 The initial release was exercised on Joomla 6.2.0 / PHP 8.3.30 with real GitHub and Joomla-to-Joomla flows. Google is implemented but has not been verified with a live Google OAuth application. A local `.test` hostname is unsuitable for a Google web-client redirect. WordPress.com appears in the Hybridauth catalog; a self-hosted WordPress site needs its own OAuth/OIDC server extension and has not been tested.
 
-The adapter catalog is not a certification of every provider. See [validation and JED notes](docs/validation.en.md), [configuration](docs/installation.en.md), [development](docs/development.en.md) and [third-party notices](THIRD_PARTY_NOTICES.md).
+The adapter catalog is not a certification of every provider. See [validation report](docs/validation.en.md), [configuration](docs/installation.en.md) and [third-party notices](THIRD_PARTY_NOTICES.md).
 
 GPL-2.0-or-later for extension code. Dependency licenses and provider trademarks retain their own terms. No affiliation with Joomla, Google or GitHub is implied.

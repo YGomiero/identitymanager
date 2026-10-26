@@ -4,3 +4,7 @@
 /.idea/
 /.vscode/
 /.phpunit.cache/
+
+# Local QA reports are not published.
+/docs/jed-checker-summary.json
+/docs/development.*.md

@@ -24,6 +24,6 @@ La création exige **deux autorisations** : Utilisateurs → Paramètres → Aut
 
 La première version a été testée sur Joomla 6.2.0 / PHP 8.3.30 avec une véritable connexion GitHub et des connexions entre Joomla. Google est intégré, mais n’a pas été vérifié avec une application OAuth Google réelle. Une adresse locale en `.test` ne convient pas à l’URL de retour d’un client web Google. WordPress.com figure dans le catalogue Hybridauth ; un WordPress auto-hébergé exige une extension serveur OAuth/OIDC et n’a pas été testé.
 
-Le catalogue ne garantit pas le fonctionnement de tous les fournisseurs. Consultez le [rapport de validation et les notes JED](docs/validation.fr.md), la [configuration](docs/installation.fr.md), le [guide de développement](docs/development.fr.md) et les [licences tierces](THIRD_PARTY_NOTICES.md).
+Le catalogue ne garantit pas le fonctionnement de tous les fournisseurs. Consultez le [rapport de validation](docs/validation.fr.md), la [configuration](docs/installation.fr.md) et les [licences tierces](THIRD_PARTY_NOTICES.md).
 
 Code sous GPL-2.0-or-later. Les dépendances et marques conservent leurs propres conditions. Aucune affiliation avec Joomla, Google ou GitHub n’est revendiquée.
