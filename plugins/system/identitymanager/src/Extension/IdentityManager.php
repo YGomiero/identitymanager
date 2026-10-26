@@ -67,6 +67,19 @@ final class IdentityManager extends CMSPlugin implements SubscriberInterface
         $view = $input->getCmd('view');
         $body = $app->getBody();
 
+        if (!$app->getIdentity()->guest) {
+            $this->injectConnectionsLink($app, $body);
+            return;
+        }
+
+        // This form asks for local proof. Offering the same external login loops back here.
+        $return = base64_decode((string) $input->get('return', '', 'BASE64'), true);
+        if ($option === 'com_users' && $view === 'login'
+            && is_string($return) && str_contains($return, 'task=auth.resumeRelink')
+            && (new \Yann\Component\IdentityManager\Site\Service\AuthService())->pendingRelink()) {
+            return;
+        }
+
         if ($body === '' || str_contains($body, 'identitymanager-social')) {
             return;
         }
@@ -95,6 +108,26 @@ final class IdentityManager extends CMSPlugin implements SubscriberInterface
                 $app->setBody($this->ensureCss($body));
                 return;
             }
+        }
+    }
+
+    /** Keep account management discoverable without requiring a dedicated menu item. */
+    private function injectConnectionsLink($app, string $body): void
+    {
+        if ($body === '' || str_contains($body, 'identitymanager-manage')) {
+            return;
+        }
+
+        $url = Route::_('index.php?option=com_identitymanager&view=connections');
+        $label = \Joomla\CMS\Language\Text::_('PLG_SYSTEM_IDENTITYMANAGER_CONNECTIONS');
+        $link = '<p class="identitymanager-manage"><a href="' . $url . '">' . htmlspecialchars($label, ENT_QUOTES, 'UTF-8') . '</a></p>';
+        $logout = '~(<form\\b[^>]*class=["\'][^"\']*\\b(?:mod-login-logout|com-users-logout__form)\\b[^"\']*["\'][^>]*>[\\s\\S]*?</form>)~i';
+
+        if (preg_match($logout, $body)) {
+            $app->setBody(preg_replace_callback($logout, static fn($match) => $match[1] . $link, $body, 1));
+        } elseif ($app->input->getCmd('option') === 'com_users' && $app->input->getCmd('view') === 'profile') {
+            $profile = '~(<div\\b[^>]*class=["\'][^"\']*\\bcom-users-profile\\b[^"\']*["\'][^>]*>)~i';
+            $app->setBody(preg_replace_callback($profile, static fn($match) => $match[1] . $link, $body, 1));
         }
     }
 

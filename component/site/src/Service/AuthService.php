@@ -42,6 +42,22 @@ class AuthService
         return ($provider['type'] ?? 'oauth2') === 'oidc' ? new OidcProvider() : new OAuth2Provider();
     }
 
+    /** A verified external identity is waiting for proof of the original local account. */
+    public function pendingRelink(?string $alias = null): ?array
+    {
+        $session = Factory::getApplication()->getSession();
+        $pending = $session->get('identitymanager.relink.pending');
+
+        if (!is_array($pending) || empty($pending['provider_alias']) || empty($pending['profile'])
+            || !is_array($pending['token'] ?? null) || (int) ($pending['user_id'] ?? 0) <= 0
+            || (int) ($pending['expires'] ?? 0) <= time()) {
+            $session->clear('identitymanager.relink.pending');
+            return null;
+        }
+
+        return $alias === null || $pending['provider_alias'] === $alias ? $pending : null;
+    }
+
     public function completeCallback(array $provider, array $profile, array $token): int
     {
         $params = ComponentHelper::getParams('com_identitymanager');
@@ -88,15 +104,8 @@ class AuthService
         }
 
         if ($revoked && (int) $revoked->revoked && $user->guest) {
-            Factory::getApplication()->getSession()->set('identitymanager.relink.pending', [
-                'provider_alias' => (string) ($provider['alias'] ?? ''),
-                'user_id' => (int) $revoked->user_id,
-                'profile' => $profile,
-                'token' => $token,
-                'expires' => time() + 600,
-            ]);
             $logger->write('login_failed', 'warning', 'COM_IDENTITYMANAGER_UI_EXTERNAL_IDENTITY_IS_REVOKED_274A3', (int) $revoked->user_id, (int) $provider['id'], $provider['name']);
-            return 0;
+            return $this->awaitLocalLink($provider, $profile, $token, (int) $revoked->user_id, 'revoked');
         }
 
         if (!$user->guest) {
@@ -120,7 +129,7 @@ class AuthService
 
         if ($existingUserId) {
             $logger->write('email_mismatch', 'warning', 'COM_IDENTITYMANAGER_UI_EXISTING_EMAIL_REQUIRES_MANUAL_LINKING_27137', $existingUserId, (int) $provider['id'], $provider['name']);
-            throw new \RuntimeException('COM_IDENTITYMANAGER_ERROR_LINK_LOGIN_REQUIRED');
+            return $this->awaitLocalLink($provider, $profile, $token, $existingUserId, 'existing_email');
         }
 
         if (!RegistrationPolicy::allowsCreation()) {
@@ -133,5 +142,21 @@ class AuthService
         $logger->write('account_created', 'success', 'COM_IDENTITYMANAGER_UI_JOOMLA_ACCOUNT_CREATED_FROM_EXTERNAL_IDENTITY_8B671', $userId, (int) $provider['id'], $provider['name']);
 
         return $userId;
+    }
+
+    /** Keep the verified provider result while Joomla authenticates the original local account. */
+    private function awaitLocalLink(array $provider, array $profile, array $token, int $userId, string $reason): int
+    {
+        Factory::getApplication()->getSession()->set('identitymanager.relink.pending', [
+            'provider_alias' => (string) $provider['alias'],
+            'provider_name' => (string) $provider['name'],
+            'user_id' => $userId,
+            'profile' => $profile,
+            'token' => $token,
+            'reason' => $reason,
+            'expires' => time() + 600,
+        ]);
+
+        return 0;
     }
 }

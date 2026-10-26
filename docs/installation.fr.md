@@ -4,7 +4,7 @@
 
 ## Installer ou mettre à jour
 
-Sauvegardez les fichiers et la base. Dans Système → Installation → Extensions, installez le ZIP `pkg_identitymanager-1.0.2.zip`. La première installation active les quatre plugins ; une mise à jour conserve leur état. Tous les fournisseurs et le rôle maître sont désactivés par défaut. Activez uniquement les services configurés.
+Sauvegardez les fichiers et la base. Dans Système → Installation → Extensions, installez le ZIP `pkg_identitymanager-1.0.3.zip`. La première installation active les quatre plugins ; une mise à jour conserve leur état. Tous les fournisseurs et le rôle maître sont désactivés par défaut. Activez uniquement les services configurés.
 
 Un **seul package** contient le composant d’administration/site, le plugin système (boutons), le plugin d’authentification (session Joomla), le catalogue Google et le catalogue Hybridauth. Chaque site choisit son rôle dans sa configuration. Installer le package sur un client ne le transforme pas automatiquement en maître.
 
@@ -19,6 +19,8 @@ Dans Utilisateurs → Paramètres, activez l’inscription Joomla si vous souhai
 L’adresse e-mail vérifiée est exigée par défaut. Une adresse déjà utilisée ne fusionne pas automatiquement les comptes : le membre doit se connecter localement puis ajouter le service depuis « Mes connexions externes ». La liaison automatique par e-mail est une option distincte, désactivée par défaut ; elle exige une adresse vérifiée et refuse les comptes administrateurs. Aucun groupe disposant d’un accès à l’administration ne peut être attribué par création automatique.
 
 Si Joomla exige une validation par un administrateur, utilisez d’abord son formulaire d’inscription. Si Joomla exige l’auto-activation par e-mail, une identité externe vérifiée remplit cette vérification ; aucune création avec e-mail non vérifié n’est acceptée dans ce mode. Les comptes bloqués ou en attente d’activation ne peuvent pas se connecter.
+
+Si l’adresse e-mail correspond à un compte local existant, le formulaire de connexion du site client s’ouvre directement. Après confirmation de ce compte, la liaison est terminée sans réglage supplémentaire. Une fois connecté, le lien « Mes connexions externes » apparaît dans le module de connexion et sur le profil Joomla ; aucun élément de menu n’est nécessaire. L’accès direct à cette page propose aussi une connexion si le visiteur est déconnecté.
 
 ## GitHub
 
@@ -75,6 +77,8 @@ La conservation vaut 90 jours par défaut ; configurez 0 pour la désactiver, ju
 
 Les visiteurs gèrent leurs services à `index.php?option=com_identitymanager&view=connections` (créez un élément de menu de ce type). Délier une identité efface ses jetons enregistrés et bloque cette connexion ; cela ne supprime pas le compte Joomla ni l’autorisation du côté du fournisseur. Conservez un moyen de connexion local avant de retirer le dernier service.
 
-## Passage du prototype 0.1.0 à 1.0.2
+Après une déliaison, une authentification externe réussie ouvre le formulaire de connexion du **site client** pour confirmer le compte local d’origine. Ce formulaire ne propose pas de relancer la connexion externe. Un retour répété ou un second clic reprend cette confirmation pendant dix minutes, sans réutiliser le code OAuth ni réactiver la liaison automatiquement. Si le compte a été créé par un fournisseur, utilisez « Mot de passe perdu ? » pour définir un mot de passe local. Pour simplement quitter le site et revenir avec le même fournisseur, utilisez « Déconnexion ».
+
+## Passage du prototype 0.1.0 à 1.0.3
 
 La migration ajoute le support PKCE sans remplacer les données. Les anciens codes d’autorisation ne sont plus utilisables : commencez une nouvelle connexion après la mise à jour. Le rôle maître doit être explicitement activé ; mettez les URL en HTTPS, vérifiez l’émetteur, configurez `HS256` pour un maître Identity Manager et un secret d’au moins 32 caractères. Mettez à jour le maître et ses clients ensemble. Réglez les inscriptions Joomla et Identity Manager selon la politique voulue. Ne restaurez pas des données chiffrées sans la clé `secret` Joomla correspondante.

@@ -4,7 +4,7 @@
 
 ## Install and update
 
-Back up files and database, then upload `pkg_identitymanager-1.0.2.zip` through System → Install → Extensions. The first installation enables four plugins; upgrades preserve their enabled state. Providers and the identity-provider role are disabled by default. Enable only configured services.
+Back up files and database, then upload `pkg_identitymanager-1.0.3.zip` through System → Install → Extensions. The first installation enables four plugins; upgrades preserve their enabled state. Providers and the identity-provider role are disabled by default. Enable only configured services.
 
 The **same package** includes the site/administrator component, system buttons plugin, Joomla authentication plugin, Google catalog and Hybridauth catalog. Each site selects its role in configuration. Client installation does not automatically enable the master role.
 
@@ -19,6 +19,8 @@ New accounts require both Joomla Users → Options → Allow User Registration a
 Verified email is required by default. Matching an existing email does not silently merge accounts: sign in locally, then add the provider from My external connections. Optional automatic email linking requires verified ownership and refuses administrator accounts. Automatic creation cannot grant a group with administrator access.
 
 When Joomla requires administrator activation, register through its normal form first. When Joomla requires email self-activation, verified external email satisfies the email check; unverified external email cannot create an account in this mode. Blocked accounts and accounts awaiting activation cannot sign in.
+
+When the email matches an existing local account, the client login form opens directly. Once that account is confirmed, linking completes without additional settings. After sign-in, My external connections appears in the login module and Joomla profile; no menu item is required. Opening the connections page as a guest also offers a login link.
 
 ## GitHub
 
@@ -68,6 +70,8 @@ Logs displays the latest 100 events. Export CSV includes all rows up to the star
 Retention defaults to 90 days. Set 0 to disable expiry, or choose up to 3650 days. Cleanup is opportunistic, deleting at most 100 expired rows per new event; there is no background job on an idle site. Archive before clearing if needed. Logs contain timestamps, event/result, internal IDs, provider, IP and browser, never passwords or OAuth tokens. Protect downloaded archives and describe processing in the site's privacy information.
 
 Members manage providers at `index.php?option=com_identitymanager&view=connections`; add a menu item to this view. Unlinking removes stored tokens and disables that external connection, but does not delete the Joomla account or revoke consent at the external provider. Keep a local login method before removing the last identity.
+
+After unlinking, a successful external authentication opens the **client site** login form to confirm the original local account. This form does not offer another external sign-in. Repeated callbacks or clicks resume that confirmation for ten minutes without exchanging the OAuth code again or automatically restoring the link. If the provider originally created your account, use Forgot your password? to set a local password. Use Log out to leave the site and later return through the same provider.
 
 ## Upgrade from prototype 0.1.0
 

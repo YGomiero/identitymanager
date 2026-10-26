@@ -1,5 +1,11 @@
 # Changelog / Historique
 
+## 1.0.3 — 2026-10-26
+
+- Guide first-time linking of an existing email through local sign-in and automatic continuation; expose My external connections in the signed-in login module and profile.
+- Resume the existing local-account confirmation after a repeated callback or click for an unlinked identity. Never replay the OAuth code or bypass local account ownership.
+- Hide external sign-in buttons on the relinking login form, expire pending requests after ten minutes and clarify the client-site/password recovery instructions in French and English.
+
 ## 1.0.2 — 2026-10-26
 
 - Respect Joomla's blocked-account flag for master sign-in, client authentication and account linking. An active account with a legacy activation value of `0` or a password-reset token can sign in normally. Blocked accounts, including registrations awaiting activation, remain refused.

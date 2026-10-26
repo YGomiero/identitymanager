@@ -36,6 +36,12 @@ class AuthController extends BaseController
             return;
         }
 
+        // A second click must not overwrite the flow awaiting local confirmation.
+        if ($app->getIdentity()->guest && $auth->pendingRelink($alias)) {
+            $this->redirectRelinkLogin();
+            return;
+        }
+
         if (($provider['type'] ?? '') === 'hybridauth') {
             try {
                 $session = $app->getSession();
@@ -78,6 +84,13 @@ class AuthController extends BaseController
         try {
             if (!$provider || !(int) $provider['enabled']) {
                 throw new \RuntimeException('COM_IDENTITYMANAGER_ERROR_PROVIDER_DISABLED');
+            }
+
+            // The callback may be repeated by a double click, history or reload.
+            // Resume only the local challenge; never exchange a code or sign in here.
+            if ($app->getIdentity()->guest && $auth->pendingRelink($alias)) {
+                $this->redirectRelinkLogin();
+                return;
             }
 
             if (($provider['type'] ?? '') === 'hybridauth') {
@@ -166,16 +179,17 @@ class AuthController extends BaseController
     {
         $app = Factory::getApplication();
         $session = $app->getSession();
-        $pending = $session->get('identitymanager.relink.pending');
+        $auth = new AuthService();
+        $pending = $auth->pendingRelink();
         $user = $app->getIdentity();
 
-        if ($user->guest) {
-            $this->redirectRelinkLogin();
+        if (!$pending) {
+            $this->redirectError('COM_IDENTITYMANAGER_ERROR_RELINK_EXPIRED');
             return;
         }
 
-        if (!is_array($pending) || empty($pending['provider_alias']) || empty($pending['profile']) || empty($pending['token']) || (int) ($pending['expires'] ?? 0) < time()) {
-            $this->redirectError('COM_IDENTITYMANAGER_ERROR_RELINK_EXPIRED');
+        if ($user->guest) {
+            $this->redirectRelinkLogin();
             return;
         }
 
@@ -185,7 +199,6 @@ class AuthController extends BaseController
             return;
         }
 
-        $auth = new AuthService();
         $provider = $auth->getProvider((string) $pending['provider_alias']);
 
         if (!$provider || !(int) $provider['enabled']) {
@@ -195,7 +208,10 @@ class AuthController extends BaseController
         }
 
         (new AccountLinkService())->link((int) $user->id, $provider, $pending['profile'], $pending['token']);
-        (new LogService())->write('account_linked', 'success', 'COM_IDENTITYMANAGER_UI_REVOKED_EXTERNAL_IDENTITY_LINKED_AGAIN_AFTER_LOCAL_LOGI_7438D', (int) $user->id, (int) $provider['id'], $provider['name']);
+        $message = ($pending['reason'] ?? '') === 'existing_email'
+            ? 'COM_IDENTITYMANAGER_UI_EXTERNAL_IDENTITY_LINKED_D9A51'
+            : 'COM_IDENTITYMANAGER_UI_REVOKED_EXTERNAL_IDENTITY_LINKED_AGAIN_AFTER_LOCAL_LOGI_7438D';
+        (new LogService())->write('account_linked', 'success', $message, (int) $user->id, (int) $provider['id'], $provider['name']);
         $session->clear('identitymanager.relink.pending');
 
         $app->enqueueMessage(Text::_('COM_IDENTITYMANAGER_CONNECTION_RELINKED'), 'message');
@@ -227,7 +243,13 @@ class AuthController extends BaseController
     {
         $app = Factory::getApplication();
         $return = base64_encode(\Joomla\CMS\Uri\Uri::root() . 'index.php?option=com_identitymanager&task=auth.resumeRelink');
-        $app->enqueueMessage(Text::_('COM_IDENTITYMANAGER_ERROR_ACCOUNT_REVOKED_LOGIN_REQUIRED'), 'notice');
+        $pending = (new AuthService())->pendingRelink();
+        $message = ($pending['reason'] ?? '') === 'existing_email'
+            ? 'COM_IDENTITYMANAGER_CONFIRM_EXISTING_ACCOUNT'
+            : 'COM_IDENTITYMANAGER_ERROR_ACCOUNT_REVOKED_LOGIN_REQUIRED';
+        $provider = htmlspecialchars($pending['provider_name'] ?? $pending['provider_alias'] ?? '', ENT_QUOTES, 'UTF-8');
+        $host = htmlspecialchars(\Joomla\CMS\Uri\Uri::getInstance()->getHost(), ENT_QUOTES, 'UTF-8');
+        $app->enqueueMessage(Text::sprintf($message, $provider, $host), 'notice');
         $app->redirect(Route::_('index.php?option=com_users&view=login&return=' . rawurlencode($return), false));
     }
 }

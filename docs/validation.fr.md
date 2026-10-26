@@ -1,4 +1,10 @@
-# Validation de la version 1.0.1
+# Validation de la version 1.0.3
+
+42 contrôles isolés et 65 contrôles d’intégration Joomla réussis. Retour GitHub réel, puis retour répété pendant la réassociation vérifiés dans le navigateur : le formulaire du site client est affiché sans erreur de session et sans bouton externe créant une boucle. Les tests couvrent la confirmation par le compte d’origine, le refus d’un autre compte, l’expiration et le rejet d’un retour sans session valide. Les comptes et réglages existants sont conservés par la mise à jour. La liaison GitHub volontairement déliée reste en attente de confirmation locale.
+
+Le parcours Joomla → Joomla a été rejoué avec le compte de test existant. Le lien « Mes connexions externes » est visible sur la page d’accueil après connexion et ouvre la gestion des fournisseurs. La première liaison d’un compte local existant est couverte par les tests d’intégration.
+
+## Historique : validation 1.0.1
 
 [English](validation.en.md) — Contrôles du 26 octobre 2026.
 

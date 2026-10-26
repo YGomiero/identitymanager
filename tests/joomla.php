@@ -33,7 +33,9 @@ try{
  $new=$profile;$new['email']='new-'.$nonce.'@example.invalid';
  rejects(fn()=>$auth->completeCallback($provider,$new,[]),'Closed Joomla registration refuses a new external account');
  rejects(fn()=>$linker->createUser($new),'Direct account creation also respects Joomla registration');
- rejects(fn()=>$auth->completeCallback($provider,$profile,[]),'Existing email cannot silently link when auto-link disabled');
+ check($auth->completeCallback($provider,$profile,[])===0 && !$linker->findLinkedAccount($provider['id'],$profile['provider_user_id']),'Existing email requests local confirmation without silently linking');
+ $firstLink=$auth->pendingRelink();check($firstLink['reason']==='existing_email' && $firstLink['user_id']===$user->id,'First-link challenge targets the existing local account');
+ $app->getSession()->clear('identitymanager.relink.pending');
  $params->set('auto_link_by_email',1);$unverified=$profile;$unverified['email_verified']=false;
  rejects(fn()=>$auth->completeCallback($provider,$unverified,[]),'Unverified external email rejected');
  rejects(fn()=>$linker->assertAutoLinkAllowed($admin->id),'Administrator email cannot be automatically linked');
@@ -43,6 +45,66 @@ try{
  $account=$linker->findLinkedAccount($provider['id'],$profile['provider_user_id']);$linker->revoke($account->id,$user->id);$revoked=$linker->findLinkedAccount($provider['id'],$profile['provider_user_id'],true);
  check(!$linker->findLinkedAccount($provider['id'],$profile['provider_user_id'])&&empty($revoked->access_token_encrypted)&&empty($revoked->refresh_token_encrypted),'Revocation removes tokens and disables link');
  $app->loadIdentity(new Joomla\CMS\User\User());check($auth->completeCallback($provider,$profile,[])===0,'Revoked identity requires local authentication');
+ // Repeated callbacks must resume the challenge, never replay OAuth or restore the link.
+ $pending=$auth->pendingRelink($provider['alias']);
+ check($pending && $pending['user_id']===$user->id,'Pending relink retains the original local account');
+ check($auth->pendingRelink('another-provider')===null && $auth->pendingRelink()!==null,'Another provider cannot resume or erase this challenge');
+ $probe=new class(null,clone $app->getConfig(),null,$container) extends Joomla\CMS\Application\CMSApplication {
+  protected $name='site';
+  protected $clientId=0;
+  protected function doExecute(){}
+  public function getLanguageFilter(){return false;}
+  public string $lastRedirect='';
+  public function redirect($url,$status=303){$this->lastRedirect=$url;}
+ };
+ $probe->setSession($app->getSession());$probe->loadIdentity(new Joomla\CMS\User\User());
+ $probe->loadLanguage(Joomla\CMS\Language\Language::getInstance('en-GB'));
+ $probe->input->set('provider',$provider['alias']);
+ Factory::$application=$probe;
+ $relinkController=new Yann\Component\IdentityManager\Site\Controller\AuthController(['base_path'=>JPATH_SITE.'/components/com_identitymanager'],null,$probe,$probe->input);
+ foreach(['oidc','hybridauth'] as $type){
+  $db->setQuery('UPDATE #__identitymanager_providers SET type='.$db->quote($type).' WHERE id='.(int)$provider['id'])->execute();
+  foreach(['start','callback'] as $action){
+   $probe->lastRedirect='';$relinkController->$action();
+   check(str_contains($probe->lastRedirect,'return=') && !str_contains($probe->lastRedirect,'STATE_INVALID'),'Repeated '.$type.' '.$action.' resumes local confirmation');
+   check(!$linker->findLinkedAccount($provider['id'],$profile['provider_user_id']) && $probe->getIdentity()->guest,'Repeated '.$type.' '.$action.' cannot restore link or sign in');
+  }
+ }
+ // The confirmation screen must not send the visitor around the external login loop.
+ $probe->loadDocument(new Joomla\CMS\Document\HtmlDocument());
+ $probe->input->set('option','com_users');$probe->input->set('view','login');
+ $probe->input->set('return',base64_encode('https://client.example/index.php?option=com_identitymanager&task=auth.resumeRelink'));
+ $form='<form id="com-users-login__form"><input name="username"><input name="password"></form>';
+ $probe->setBody($form);
+ $system=$probe->bootPlugin('identitymanager','system');
+ $inject=new ReflectionMethod($system,'injectButtons');$inject->invoke($system,$probe);
+ check($probe->getBody()===$form,'Relink login form does not offer external sign-in buttons');
+ $probe->loadIdentity($member);
+ $logout='<form class="mod-login-logout form-vertical"><button>Log out</button></form>';
+ $probe->setBody($logout);$inject->invoke($system,$probe);$inject->invoke($system,$probe);
+ check(substr_count($probe->getBody(),'identitymanager-manage')===1 && str_contains($probe->getBody(),'identitymanager'),'Signed-in module offers one connections link across both render events');
+ $probe->input->set('view','profile');$probe->setBody('<div class="com-users-profile">Profile</div>');$inject->invoke($system,$probe);
+ check(str_contains($probe->getBody(),'identitymanager-manage'),'Profile offers connections link when no login module is present');
+ $probe->loadIdentity(new Joomla\CMS\User\User());$probe->input->set('view','login');$probe->setBody($form);$inject->invoke($system,$probe);
+ check(!str_contains($probe->getBody(),'identitymanager-manage'),'Guest confirmation form does not display account management');
+ $probe->loadIdentity($admin);$relinkController->resumeRelink();
+ check(str_contains($probe->lastRedirect,'RELINK_WRONG_ACCOUNT') && !$auth->pendingRelink(),'Another local account cannot restore the identity');
+ $probe->getSession()->set('identitymanager.relink.pending',$pending);$probe->loadIdentity($member);
+ $relinkController->resumeRelink();
+ check((int)$linker->findLinkedAccount($provider['id'],$profile['provider_user_id'])->user_id===$user->id && !$auth->pendingRelink(),'Original locally authenticated account restores link and consumes challenge');
+ $linker->revoke($account->id,$user->id);
+ $pending['expires']=time()-1;$probe->getSession()->set('identitymanager.relink.pending',$pending);$probe->loadIdentity(new Joomla\CMS\User\User());
+ check(!$auth->pendingRelink() && !$probe->getSession()->get('identitymanager.relink.pending'),'Expired relink data is removed');
+ $relinkController->resumeRelink();check(str_contains($probe->lastRedirect,'RELINK_EXPIRED'),'Expired guest relink does not loop through login');
+ $relinkController->callback();check(str_contains($probe->lastRedirect,'STATE_INVALID'),'Callback without an active flow or challenge is still rejected');
+ // A new provider identity with a matching local email follows the same confirmation path.
+ $firstProfile=$profile;$firstProfile['provider_user_id']='first-link-'.$nonce;
+ check($auth->completeCallback($provider,$firstProfile,[])===0,'Existing-account first link starts a local challenge');
+ $relinkController->start();check(str_contains($probe->lastRedirect,'return='),'First link opens local login with automatic continuation');
+ $probe->loadIdentity($member);$relinkController->resumeRelink();
+ check((int)$linker->findLinkedAccount($provider['id'],$firstProfile['provider_user_id'])->user_id===$user->id && !$auth->pendingRelink(),'Local confirmation completes first link without finding a front-end menu');
+ $db->setQuery("UPDATE #__identitymanager_providers SET type='oidc' WHERE id=".(int)$provider['id'])->execute();
+ Factory::$application=$app;
  $db->setQuery('UPDATE #__users SET block=1 WHERE id='.(int)$user->id)->execute();rejects(fn()=>$linker->assertAutoLinkAllowed($user->id),'Blocked member cannot auto-link');
  $db->setQuery('UPDATE #__users SET block=0 WHERE id='.(int)$user->id)->execute();
  $service=new IdpService();

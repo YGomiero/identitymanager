@@ -1,4 +1,10 @@
-# Version 1.0.1 validation
+# Version 1.0.3 validation
+
+42 isolated checks and 65 Joomla integration checks passed. A real GitHub return followed by a repeated callback during relinking was verified in the browser: the client login form is displayed without a session error or looping external sign-in buttons. Tests cover confirmation by the original account, rejection of another account, expiration and rejection without a valid flow. The update preserves existing accounts and settings. The deliberately unlinked GitHub identity remains pending local confirmation.
+
+The Joomla-to-Joomla flow was repeated with the existing test account. My external connections is visible on the signed-in homepage and opens provider management. First-time linking of an existing local account is covered by integration tests.
+
+## Historical validation: 1.0.1
 
 After publication, Joomla's real updater successfully discovered, downloaded and installed the 1.0.1 GitHub release over 1.0.0. Settings, providers, clients and linked identities were unchanged. The other two local installations were upgraded to the same package with these data preserved. All three public release assets match the local build and checksum list. GitHub CI passed on PHP 8.3 and 8.4, and the 24 Joomla integration checks passed again after the real update.
 

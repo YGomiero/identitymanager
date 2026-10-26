@@ -19,6 +19,8 @@ $user = $app->getIdentity();
 
 if ($user->guest) {
     echo '<p>' . Text::_('COM_IDENTITYMANAGER_CONNECTIONS_LOGIN_REQUIRED') . '</p>';
+    $return = base64_encode(\Joomla\CMS\Uri\Uri::root() . 'index.php?option=com_identitymanager&view=connections');
+    echo '<p><a class="btn btn-primary" href="' . Route::_('index.php?option=com_users&view=login&return=' . rawurlencode($return)) . '">' . Text::_('COM_IDENTITYMANAGER_BACK_TO_LOGIN') . '</a></p>';
     return;
 }
 

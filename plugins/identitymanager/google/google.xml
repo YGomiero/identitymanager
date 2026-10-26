@@ -4,7 +4,7 @@
   <author>Yann Gomiero</author>
   <creationDate>2026-10</creationDate>
   <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <description>PLG_IDENTITYMANAGER_GOOGLE_XML_DESCRIPTION</description>
   <namespace path="src">Yann\Plugin\IdentityManager\Google</namespace>
   <files>
