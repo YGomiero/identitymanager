@@ -1,6 +1,6 @@
 # Identity Manager for Joomla
 
-[Français](README.fr.md) · [Download](https://github.com/YGomiero/identitymanager-joomla/releases/latest) · [Installation](docs/installation.en.md) · [Security](SECURITY.md)
+[Français](README.fr.md) · [Download](https://github.com/YGomiero/identitymanager-joomla/releases/latest) · [Installation](docs/installation.en.md) · [Report an issue](https://github.com/YGomiero/identitymanager-joomla/issues) · [Security](SECURITY.md)
 
 ![Identity Manager — one package, connected identities](docs/identitymanager.svg)
 

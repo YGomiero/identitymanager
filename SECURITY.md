@@ -1,8 +1,8 @@
 # Security / Sécurité
 
-Report suspected vulnerabilities privately to **extensions@gomiero.me**. Include the affected version, a minimal reproduction, expected impact and a safe sample without credentials, personal information or live tokens. Do not publish an exploit against a live site. Supported release line: 1.x; the 0.1.0 prototype is not supported.
+Report bugs and suspected vulnerabilities through [GitHub Issues](https://github.com/YGomiero/identitymanager-joomla/issues). Include the affected version, a minimal reproduction, expected impact and a safe sample without credentials, personal information or live tokens. Do not publish an exploit against a live site. Supported release line: 1.x; the 0.1.0 prototype is not supported.
 
-Signalez une vulnérabilité en privé à **extensions@gomiero.me**, avec la version, les étapes de reproduction et l’impact attendu. Retirez les identifiants, données personnelles et jetons. La branche 1.x est suivie ; le prototype 0.1.0 n’est plus pris en charge.
+Signalez les problèmes et les vulnérabilités dans les [Issues GitHub](https://github.com/YGomiero/identitymanager-joomla/issues), avec la version, les étapes de reproduction et l’impact attendu. Retirez les identifiants, données personnelles et jetons. Ne publiez pas de procédure d’exploitation visant un site réel. La branche 1.x est suivie ; le prototype 0.1.0 n’est plus pris en charge.
 
 ## Controls / Protections
 
