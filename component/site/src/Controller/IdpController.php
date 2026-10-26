@@ -10,6 +10,7 @@ namespace Yann\Component\IdentityManager\Site\Controller;
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
@@ -28,7 +29,7 @@ class IdpController extends BaseController
         $scope = (string) $this->input->get('scope', 'openid profile email', 'raw');
         $nonce = (string) $this->input->get('nonce', '', 'raw');
         $challenge = (string) $this->input->get('code_challenge', '', 'raw');
-        if ($this->input->getCmd('code_challenge_method') !== 'S256' || !preg_match('/^[A-Za-z0-9_-]{43}$/D', $challenge)) { throw new \RuntimeException('COM_IDENTITYMANAGER_ERROR_PKCE', 400); }
+        if ($this->input->getCmd('code_challenge_method') !== 'S256' || !preg_match('/^[A-Za-z0-9_-]{43}$/D', $challenge)) { throw new \RuntimeException(Text::_('COM_IDENTITYMANAGER_ERROR_PKCE'), 400); }
         $prompt = (string) $this->input->get('prompt', '', 'cmd');
         $client = $service->getClient($clientId);
 
@@ -244,10 +245,10 @@ class IdpController extends BaseController
         $request = $app->getSession()->get('identitymanager.consent');
         $app->getSession()->clear('identitymanager.consent');
         if (!is_array($request) || $request['expires'] < time() || $app->getIdentity()->guest || $request['userId'] !== (int) $app->getIdentity()->id) {
-            throw new \RuntimeException('COM_IDENTITYMANAGER_ERROR_STATE_INVALID', 400);
+            throw new \RuntimeException(Text::_('COM_IDENTITYMANAGER_ERROR_STATE_INVALID'), 400);
         }
         $client = (new IdpService())->getClient($request['client']['client_id']);
-        if (!$client || !(new IdpService())->validateRedirect($client, $request['redirectUri'])) { throw new \RuntimeException('COM_IDENTITYMANAGER_ERROR_STATE_INVALID', 400); }
+        if (!$client || !(new IdpService())->validateRedirect($client, $request['redirectUri'])) { throw new \RuntimeException(Text::_('COM_IDENTITYMANAGER_ERROR_STATE_INVALID'), 400); }
         if (!$this->input->post->getInt('allow')) {
             $separator = str_contains($request['redirectUri'], '?') ? '&' : '?';
             $app->redirect($request['redirectUri'] . $separator . http_build_query(['error' => 'access_denied', 'state' => $request['state']]));

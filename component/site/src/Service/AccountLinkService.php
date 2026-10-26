@@ -193,7 +193,8 @@ class AccountLinkService
     public function assertAutoLinkAllowed(int $userId): void
     {
         $user = Factory::getContainer()->get(\Joomla\CMS\User\UserFactoryInterface::class)->loadUserById($userId);
-        if (!$user->id || $user->block || $user->activation !== '' || $user->authorise('core.admin') || $user->authorise('core.login.admin')) {
+        // The activation field also stores password-reset tokens; block is Joomla's account-status flag.
+        if (!$user->id || $user->block || $user->authorise('core.admin') || $user->authorise('core.login.admin')) {
             throw new \RuntimeException('COM_IDENTITYMANAGER_ERROR_LINK_LOGIN_REQUIRED');
         }
     }

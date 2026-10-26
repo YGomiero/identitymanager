@@ -96,7 +96,9 @@ class IdpService
     {
         $user = Factory::getContainer()->get(\Joomla\CMS\User\UserFactoryInterface::class)->loadUserById($userId);
 
-        if (!$user->id || $user->block || $user->activation !== '') { throw new \RuntimeException('COM_IDENTITYMANAGER_ERROR_LOGIN_FAILED'); }
+        // Joomla uses block for pending activation. The activation field can also
+        // contain a legacy "0" or a password-reset token on an active account.
+        if (!$user->id || $user->block) { throw new \RuntimeException(\Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_ERROR_LOGIN_FAILED'), 403); }
 
         return [
             'sub' => (string) $user->id,

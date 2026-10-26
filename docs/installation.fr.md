@@ -4,7 +4,7 @@
 
 ## Installer ou mettre à jour
 
-Sauvegardez les fichiers et la base. Dans Système → Installation → Extensions, installez le ZIP `pkg_identitymanager-1.0.1.zip`. La première installation active les quatre plugins ; une mise à jour conserve leur état. Tous les fournisseurs et le rôle maître sont désactivés par défaut. Activez uniquement les services configurés.
+Sauvegardez les fichiers et la base. Dans Système → Installation → Extensions, installez le ZIP `pkg_identitymanager-1.0.2.zip`. La première installation active les quatre plugins ; une mise à jour conserve leur état. Tous les fournisseurs et le rôle maître sont désactivés par défaut. Activez uniquement les services configurés.
 
 Un **seul package** contient le composant d’administration/site, le plugin système (boutons), le plugin d’authentification (session Joomla), le catalogue Google et le catalogue Hybridauth. Chaque site choisit son rôle dans sa configuration. Installer le package sur un client ne le transforme pas automatiquement en maître.
 
@@ -75,6 +75,6 @@ La conservation vaut 90 jours par défaut ; configurez 0 pour la désactiver, ju
 
 Les visiteurs gèrent leurs services à `index.php?option=com_identitymanager&view=connections` (créez un élément de menu de ce type). Délier une identité efface ses jetons enregistrés et bloque cette connexion ; cela ne supprime pas le compte Joomla ni l’autorisation du côté du fournisseur. Conservez un moyen de connexion local avant de retirer le dernier service.
 
-## Passage du prototype 0.1.0 à 1.0.1
+## Passage du prototype 0.1.0 à 1.0.2
 
 La migration ajoute le support PKCE sans remplacer les données. Les anciens codes d’autorisation ne sont plus utilisables : commencez une nouvelle connexion après la mise à jour. Le rôle maître doit être explicitement activé ; mettez les URL en HTTPS, vérifiez l’émetteur, configurez `HS256` pour un maître Identity Manager et un secret d’au moins 32 caractères. Mettez à jour le maître et ses clients ensemble. Réglez les inscriptions Joomla et Identity Manager selon la politique voulue. Ne restaurez pas des données chiffrées sans la clé `secret` Joomla correspondante.

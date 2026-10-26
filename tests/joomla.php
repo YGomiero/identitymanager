@@ -45,7 +45,34 @@ try{
  $app->loadIdentity(new Joomla\CMS\User\User());check($auth->completeCallback($provider,$profile,[])===0,'Revoked identity requires local authentication');
  $db->setQuery('UPDATE #__users SET block=1 WHERE id='.(int)$user->id)->execute();rejects(fn()=>$linker->assertAutoLinkAllowed($user->id),'Blocked member cannot auto-link');
  $db->setQuery('UPDATE #__users SET block=0 WHERE id='.(int)$user->id)->execute();
- $service=new IdpService();$client=['client_id'=>'im-test-'.$nonce,'client_secret'=>str_repeat('s',64),'scope'=>'openid profile email','redirect_uris'=>['https://client.example/callback']];
+ $service=new IdpService();
+ // Joomla reuses activation for password resets; only block determines account availability.
+ $site=$container->get(Joomla\CMS\Application\SiteApplication::class);
+ $site->loadLanguage(Joomla\CMS\Language\Language::getInstance('en-GB'));
+ $plugin=$site->bootPlugin('identitymanager','authentication');
+ $authenticate=function()use($site,$plugin,$user,$app){
+  Factory::$application=$site;
+  try{
+   $site->getSession()->set('identitymanager.login_ticket',['user_id'=>$user->id,'expires'=>time()+30]);
+   $response=new Joomla\CMS\Authentication\AuthenticationResponse();
+   $event=new Joomla\CMS\Event\User\AuthenticationEvent('onUserAuthenticate',['subject'=>$response,'credentials'=>['username'=>$user->username,'password'=>''],'options'=>['identitymanager_user_id'=>$user->id]]);
+   $plugin->onUserAuthenticate($event);
+   return $response->status===Joomla\CMS\Authentication\Authentication::STATUS_SUCCESS;
+  }finally{Factory::$application=$app;}
+ };
+ $db->setQuery('UPDATE #__identitymanager_accounts SET revoked=0 WHERE id='.(int)$account->id)->execute();
+ foreach(['empty'=>'','legacy zero'=>'0','password reset'=>'fixture-reset-token'] as $label=>$activation){
+  $db->setQuery('UPDATE #__users SET block=0,activation='.$db->quote($activation).' WHERE id='.(int)$user->id)->execute();
+  check($service->userClaims($user->id,$service->issuer())['sub']===(string)$user->id,'Active master account accepted: '.$label);
+  $linker->assertAutoLinkAllowed($user->id);check(true,'Active member can link: '.$label);
+  check($authenticate(),'Active client account authenticates: '.$label);
+  $db->setQuery('UPDATE #__users SET block=1 WHERE id='.(int)$user->id)->execute();
+  rejects(fn()=>$service->userClaims($user->id,$service->issuer()),'Blocked master account rejected: '.$label);
+  rejects(fn()=>$linker->assertAutoLinkAllowed($user->id),'Blocked account cannot link: '.$label);
+  check(!$authenticate(),'Blocked client account rejected: '.$label);
+ }
+ $db->setQuery("UPDATE #__users SET block=0,activation='' WHERE id=".(int)$user->id)->execute();
+ $client=['client_id'=>'im-test-'.$nonce,'client_secret'=>str_repeat('s',64),'scope'=>'openid profile email','redirect_uris'=>['https://client.example/callback']];
  check($service->validateRedirect($client,'https://client.example/callback')&&!$service->validateRedirect($client,'https://client.example/callback/evil'),'Exact redirect matching');
  $verifier=str_repeat('v',64);$challenge=rtrim(strtr(base64_encode(hash('sha256',$verifier,true)),'+/','-_'),'=');
  rejects(fn()=>$service->issueCode($client,$user->id,$client['redirect_uris'][0],'openid admin','nonce',$challenge),'Unsupported scopes rejected');

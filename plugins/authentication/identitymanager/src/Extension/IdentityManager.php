@@ -59,7 +59,8 @@ final class IdentityManager extends CMSPlugin implements SubscriberInterface
         }
 
         $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($userId);
-        if (!$user->id || $user->block || $user->activation !== '') {
+        // Pending activation is blocked by Joomla; an activation value alone may be a password reset.
+        if (!$user->id || $user->block) {
             $response->status = Authentication::STATUS_FAILURE;
             $response->error_message = \Joomla\CMS\Language\Text::_('COM_IDENTITYMANAGER_UI_JOOMLA_USER_IS_BLOCKED_OR_MISSING_113CC');
             return;

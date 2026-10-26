@@ -1,5 +1,11 @@
 # Changelog / Historique
 
+## 1.0.2 — 2026-10-26
+
+- Respect Joomla's blocked-account flag for master sign-in, client authentication and account linking. An active account with a legacy activation value of `0` or a password-reset token can sign in normally. Blocked accounts, including registrations awaiting activation, remain refused.
+- Translate identity-provider errors and return HTTP 403 when an account is unavailable.
+- Correct the French wording for a previously unlinked identity.
+
 ## 1.0.1 — 2026-10-26
 
 - Fix Joomla update discovery by declaring the package's `site` client in the update feed. Previously Joomla treated the update as an uninstalled administrator extension.

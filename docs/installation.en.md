@@ -4,7 +4,7 @@
 
 ## Install and update
 
-Back up files and database, then upload `pkg_identitymanager-1.0.1.zip` through System → Install → Extensions. The first installation enables four plugins; upgrades preserve their enabled state. Providers and the identity-provider role are disabled by default. Enable only configured services.
+Back up files and database, then upload `pkg_identitymanager-1.0.2.zip` through System → Install → Extensions. The first installation enables four plugins; upgrades preserve their enabled state. Providers and the identity-provider role are disabled by default. Enable only configured services.
 
 The **same package** includes the site/administrator component, system buttons plugin, Joomla authentication plugin, Google catalog and Hybridauth catalog. Each site selects its role in configuration. Client installation does not automatically enable the master role.
 
