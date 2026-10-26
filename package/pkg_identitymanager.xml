@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<extension type="package" method="upgrade">
+  <name>pkg_identitymanager</name>
+  <packagename>identitymanager</packagename>
+  <author>Yann Gomiero</author>
+  <authorEmail>extensions@gomiero.me</authorEmail>
+  <authorUrl>https://github.com/YGomiero/identitymanager-joomla</authorUrl>
+  <creationDate>2026-10</creationDate>
+  <copyright>(C) 2026 Yann Gomiero</copyright>
+  <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+  <version>1.0.0</version>
+  <description>PKG_IDENTITYMANAGER_XML_DESCRIPTION</description>
+  <url>https://github.com/YGomiero/identitymanager-joomla</url>
+  <blockChildUninstall>true</blockChildUninstall>
+  <scriptfile>script.php</scriptfile>
+  <files>
+    <file type="component" id="com_identitymanager">packages/com_identitymanager.zip</file>
+    <file type="plugin" id="identitymanager" group="system">packages/plg_system_identitymanager.zip</file>
+    <file type="plugin" id="identitymanager" group="authentication">packages/plg_authentication_identitymanager.zip</file>
+    <file type="plugin" id="google" group="identitymanager">packages/plg_identitymanager_google.zip</file>
+    <file type="plugin" id="hybridauth" group="identitymanager">packages/plg_identitymanager_hybridauth.zip</file>
+  </files>
+  <languages folder="language">
+    <language tag="en-GB" client="administrator">en-GB/pkg_identitymanager.sys.ini</language>
+    <language tag="fr-FR" client="administrator">fr-FR/pkg_identitymanager.sys.ini</language>
+  </languages>
+  <updateservers>
+    <server type="extension" priority="1" name="Identity Manager stable">https://github.com/YGomiero/identitymanager-joomla/releases/latest/download/update.xml</server>
+  </updateservers>
+</extension>

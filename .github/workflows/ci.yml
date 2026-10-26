@@ -1,0 +1,23 @@
+name: Validate extension
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.3', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: curl, openssl, mbstring
+          tools: composer:v2
+          coverage: none
+      - run: composer install --working-dir=component/site --no-dev --prefer-dist --no-interaction
+      - run: composer audit --working-dir=component/site --no-dev
+      - run: php tests/run.php
+      - run: python3 tools/build.py
+      - run: python3 tools/validate.py

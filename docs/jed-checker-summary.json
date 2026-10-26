@@ -1,0 +1,242 @@
+{
+  "checked_at": "2026-10-26",
+  "package_sha256": "132ccc14d9c8215fd093273f6d707221e7f5007ccdfb8b731e646e54a3c6bc52",
+  "stable_2.4.4": {
+    "encoding": {
+      "total": 36,
+      "error": 0,
+      "warning": 36,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "errorreporting": {
+      "total": 0,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "framework": {
+      "total": 17,
+      "error": 0,
+      "warning": 14,
+      "compatibility": 0,
+      "notice": 3,
+      "info": 0,
+      "passed": 0
+    },
+    "gpl": {
+      "total": 176,
+      "error": 0,
+      "warning": 118,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 58
+    },
+    "jamss": {
+      "total": 16,
+      "error": 0,
+      "warning": 16,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "jexec": {
+      "total": 0,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "language": {
+      "total": 216,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 216,
+      "info": 0,
+      "passed": 0
+    },
+    "xmlfiles": {
+      "total": 0,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "xmlinfo": {
+      "total": 6,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 6,
+      "passed": 0
+    },
+    "xmllicense": {
+      "total": 0,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "xmlmanifest": {
+      "total": 0,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "xmlupdateserver": {
+      "total": 1,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 1
+    }
+  },
+  "local_development_3.0.0": {
+    "INFO_XML": {
+      "total": 6,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 6,
+      "passed": 0
+    },
+    "PH3": {
+      "total": 6,
+      "error": 6,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "MANIFEST": {
+      "total": 0,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "XMLFILES": {
+      "total": 0,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "US1": {
+      "total": 1,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 1
+    },
+    "PH1": {
+      "total": 176,
+      "error": 0,
+      "warning": 118,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 58
+    },
+    "PH2": {
+      "total": 0,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "Framework": {
+      "total": 22,
+      "error": 0,
+      "warning": 19,
+      "compatibility": 0,
+      "notice": 3,
+      "info": 0,
+      "passed": 0
+    },
+    "PHP": {
+      "total": 0,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "Security": {
+      "total": 0,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "errorreporting": {
+      "total": 0,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "encoding": {
+      "total": 36,
+      "error": 0,
+      "warning": 36,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "Jamss": {
+      "total": 16,
+      "error": 0,
+      "warning": 16,
+      "compatibility": 0,
+      "notice": 0,
+      "info": 0,
+      "passed": 0
+    },
+    "LANG": {
+      "total": 216,
+      "error": 0,
+      "warning": 0,
+      "compatibility": 0,
+      "notice": 216,
+      "info": 0,
+      "passed": 0
+    }
+  }
+}

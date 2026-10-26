@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<extension type="plugin" group="identitymanager" method="upgrade">
+  <name>plg_identitymanager_hybridauth</name>
+  <author>Yann Gomiero</author>
+  <creationDate>2026-10</creationDate>
+  <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+  <version>1.0.0</version>
+  <description>PLG_IDENTITYMANAGER_HYBRIDAUTH_XML_DESCRIPTION</description>
+  <namespace path="src">Yann\Plugin\IdentityManager\Hybridauth</namespace>
+  <files>
+    <folder plugin="hybridauth">services</folder>
+    <folder>src</folder>
+    <filename>LICENSE.txt</filename>
+    <folder>language</folder>
+  </files>
+  <languages>
+    <language tag="en-GB">language/en-GB/plg_identitymanager_hybridauth.ini</language>
+    <language tag="en-GB">language/en-GB/plg_identitymanager_hybridauth.sys.ini</language>
+    <language tag="fr-FR">language/fr-FR/plg_identitymanager_hybridauth.ini</language>
+    <language tag="fr-FR">language/fr-FR/plg_identitymanager_hybridauth.sys.ini</language>
+  </languages>
+  <authorEmail>extensions@gomiero.me</authorEmail>
+  <authorUrl>https://github.com/YGomiero/identitymanager-joomla</authorUrl>
+  <copyright>(C) 2026 Yann Gomiero</copyright>
+</extension>

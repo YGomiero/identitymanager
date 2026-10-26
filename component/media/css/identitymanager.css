@@ -1,0 +1,58 @@
+.identitymanager-social {
+	margin-top: 1.25rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--border-color, #dfe3e7);
+}
+.identitymanager-social__title {
+	margin: 0 0 .75rem;
+	color: var(--text-muted, #5f6f80);
+	font-size: .95rem;
+	text-align: center;
+}
+.identitymanager-social__buttons {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+	gap: .625rem;
+}
+.identitymanager-button {
+	gap: .65rem;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 2.75rem;
+	padding: .5rem .875rem;
+	border: 1px solid #c8d0d8;
+	border-radius: .375rem;
+	background: #fff;
+	color: #1d2733;
+	font-weight: 600;
+	text-decoration: none;
+}
+.identitymanager-icon { display: inline-flex; width: 20px; height: 20px; flex: 0 0 20px; align-items: center; justify-content: center; }
+.identitymanager-icon img { display: block; width: 20px; height: 20px; object-fit: contain; }
+.identitymanager-social__hint { font-size: .85rem; text-align: center; color: #52677b; }
+.identitymanager-button:hover,
+.identitymanager-button:focus {
+	background: #f5f7f9;
+	color: #111827;
+	text-decoration: none;
+}
+.identitymanager-list {
+	display: grid;
+	gap: .75rem;
+}
+.identitymanager-account {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: .875rem;
+	border: 1px solid #dfe3e7;
+	border-radius: .5rem;
+}
+@media (max-width: 540px) {
+	.identitymanager-account {
+		align-items: stretch;
+		flex-direction: column;
+	}
+}

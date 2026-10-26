@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<fields name="params">
+		<fieldset name="display" label="COM_IDENTITYMANAGER_CONFIG_DISPLAY_LABEL">
+			<field name="connections_title" type="text" label="COM_IDENTITYMANAGER_CONFIG_CONNECTIONS_TITLE_LABEL" default="" filter="string" />
+			<field name="connections_intro" type="editor" label="COM_IDENTITYMANAGER_CONFIG_CONNECTIONS_INTRO_LABEL" description="COM_IDENTITYMANAGER_CONFIG_CONNECTIONS_INTRO_DESC" filter="safehtml" buttons="true" hide="readmore,pagebreak" />
+		</fieldset>
+        <fieldset name="logs" label="COM_IDENTITYMANAGER_MENU_LOGS">
+            <field name="log_retention_days" type="number" label="COM_IDENTITYMANAGER_LOGS_RETENTION" description="COM_IDENTITYMANAGER_LOGS_RETENTION_DESC" default="90" min="0" max="3650" filter="integer" />
+        </fieldset>
+		<fieldset name="security" label="COM_IDENTITYMANAGER_CONFIG_SECURITY_LABEL">
+			<field name="store_refresh_tokens" type="radio" layout="joomla.form.field.radio.switcher" label="COM_IDENTITYMANAGER_CONFIG_STORE_REFRESH_TOKENS_LABEL" default="0" filter="integer">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="force_verified_email" type="radio" layout="joomla.form.field.radio.switcher" label="COM_IDENTITYMANAGER_CONFIG_FORCE_VERIFIED_EMAIL_LABEL" default="1" filter="integer">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="auto_create_users" type="radio" layout="joomla.form.field.radio.switcher" label="COM_IDENTITYMANAGER_CONFIG_AUTO_CREATE_USERS_LABEL" description="COM_IDENTITYMANAGER_CONFIG_AUTO_CREATE_USERS_DESC" default="0" filter="integer">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="auto_link_by_email" type="radio" layout="joomla.form.field.radio.switcher" label="COM_IDENTITYMANAGER_CONFIG_AUTO_LINK_BY_EMAIL_LABEL" default="0" filter="integer">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+		</fieldset>
+        <fieldset name="idp" label="COM_IDENTITYMANAGER_CONFIG_IDP_LABEL">
+            <field name="idp_enabled" type="radio" layout="joomla.form.field.radio.switcher" label="COM_IDENTITYMANAGER_CONFIG_IDP_ENABLED" default="0" filter="integer"><option value="0">JNO</option><option value="1">JYES</option></field>
+            <field name="idp_verified_email" type="radio" layout="joomla.form.field.radio.switcher" label="COM_IDENTITYMANAGER_CONFIG_IDP_VERIFIED" description="COM_IDENTITYMANAGER_CONFIG_IDP_VERIFIED_DESC" default="0" filter="integer"><option value="0">JNO</option><option value="1">JYES</option></field>
+        </fieldset>
+        <fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL"><field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" filter="rules" validate="rules" component="com_identitymanager" section="component" /></fieldset>
+	</fields>
+</config>

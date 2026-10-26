@@ -1,0 +1,13 @@
+{
+  "name": "identitymanager/com-identitymanager-site",
+  "description": "Runtime dependencies for Joomla Identity Manager site component.",
+  "type": "project",
+  "require": {
+    "hybridauth/hybridauth": "^3.13",
+    "firebase/php-jwt": "^7.2"
+  },
+  "config": {
+    "vendor-dir": "vendor",
+    "optimize-autoloader": true
+  }
+}

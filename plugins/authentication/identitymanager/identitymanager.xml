@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<extension type="plugin" group="authentication" method="upgrade">
+  <name>plg_authentication_identitymanager</name>
+  <author>Yann Gomiero</author>
+  <creationDate>2026-10</creationDate>
+  <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+  <version>1.0.0</version>
+  <description>PLG_AUTHENTICATION_IDENTITYMANAGER_XML_DESCRIPTION</description>
+  <namespace path="src">Yann\Plugin\Authentication\IdentityManager</namespace>
+  <files>
+    <folder plugin="identitymanager">services</folder>
+    <folder>src</folder>
+    <filename>LICENSE.txt</filename>
+    <folder>language</folder>
+  </files>
+  <languages>
+    <language tag="en-GB">language/en-GB/plg_authentication_identitymanager.ini</language>
+    <language tag="en-GB">language/en-GB/plg_authentication_identitymanager.sys.ini</language>
+    <language tag="fr-FR">language/fr-FR/plg_authentication_identitymanager.ini</language>
+    <language tag="fr-FR">language/fr-FR/plg_authentication_identitymanager.sys.ini</language>
+  </languages>
+  <authorEmail>extensions@gomiero.me</authorEmail>
+  <authorUrl>https://github.com/YGomiero/identitymanager-joomla</authorUrl>
+  <copyright>(C) 2026 Yann Gomiero</copyright>
+</extension>

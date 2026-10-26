@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='utf-8'?>
+<extension type="component" method="upgrade">
+  <name>com_identitymanager</name>
+  <author>Yann Gomiero</author>
+  <creationDate>2026-10</creationDate>
+  <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+  <version>1.0.0</version>
+  <description>COM_IDENTITYMANAGER_XML_DESCRIPTION</description>
+  <namespace path="src">Yann\Component\IdentityManager</namespace>
+  <install>
+    <sql>
+      <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+    </sql>
+  </install>
+  <uninstall>
+    <sql>
+      <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+    </sql>
+  </uninstall>
+  <files folder="site">
+    <folder>src</folder>
+    <folder>tmpl</folder>
+    <folder>language</folder>
+    <folder>vendor</folder>
+    <filename>LICENSE.txt</filename>
+  </files>
+  <media destination="com_identitymanager" folder="media">
+    <folder>css</folder>
+    <folder>images</folder>
+    <folder>js</folder>
+  </media>
+  <administration>
+    <menu img="class:lock">COM_IDENTITYMANAGER</menu>
+    <submenu>
+      <menu link="option=com_identitymanager">COM_IDENTITYMANAGER_MENU_DASHBOARD</menu>
+      <menu link="option=com_identitymanager&amp;view=providers">COM_IDENTITYMANAGER_MENU_PROVIDERS</menu>
+      <menu link="option=com_identitymanager&amp;view=adapters">COM_IDENTITYMANAGER_MENU_ADAPTERS</menu>
+      <menu link="option=com_identitymanager&amp;view=clients">COM_IDENTITYMANAGER_MENU_CLIENTS</menu>
+      <menu link="option=com_identitymanager&amp;view=accounts">COM_IDENTITYMANAGER_MENU_ACCOUNTS</menu>
+      <menu link="option=com_identitymanager&amp;view=logs">COM_IDENTITYMANAGER_MENU_LOGS</menu>
+      <menu link="option=com_identitymanager&amp;view=settings">COM_IDENTITYMANAGER_MENU_SETTINGS</menu>
+    </submenu>
+    <files folder="admin">
+      <filename>access.xml</filename>
+      <filename>config.xml</filename>
+      <folder>language</folder>
+      <folder>services</folder>
+      <folder>sql</folder>
+      <folder>src</folder>
+      <folder>tmpl</folder>
+      <filename>LICENSE.txt</filename>
+    </files>
+    <languages folder="admin">
+      <language tag="en-GB">language/en-GB/com_identitymanager.ini</language>
+      <language tag="en-GB">language/en-GB/com_identitymanager.sys.ini</language>
+      <language tag="fr-FR">language/fr-FR/com_identitymanager.ini</language>
+      <language tag="fr-FR">language/fr-FR/com_identitymanager.sys.ini</language>
+    </languages>
+  </administration>
+  <authorEmail>extensions@gomiero.me</authorEmail>
+  <authorUrl>https://github.com/YGomiero/identitymanager-joomla</authorUrl>
+  <copyright>(C) 2026 Yann Gomiero</copyright>
+  <scriptfile>script.php</scriptfile>
+  <languages folder="site">
+    <language tag="en-GB">language/en-GB/com_identitymanager.ini</language>
+    <language tag="en-GB">language/en-GB/com_identitymanager.sys.ini</language>
+    <language tag="fr-FR">language/fr-FR/com_identitymanager.ini</language>
+    <language tag="fr-FR">language/fr-FR/com_identitymanager.sys.ini</language>
+  </languages>
+</extension>

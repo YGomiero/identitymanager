@@ -1,0 +1,6 @@
+/dist/
+/component/site/vendor/
+*.log
+/.idea/
+/.vscode/
+/.phpunit.cache/
