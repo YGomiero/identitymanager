@@ -1,5 +1,7 @@
 # Version 1.0.1 validation
 
+After publication, Joomla's real updater successfully discovered, downloaded and installed the 1.0.1 GitHub release over 1.0.0. Settings, providers, clients and linked identities were unchanged. The other two local installations were upgraded to the same package with these data preserved. All three public release assets match the local build and checksum list. GitHub CI passed on PHP 8.3 and 8.4, and the 24 Joomla integration checks passed again after the real update.
+
 [Français](validation.fr.md) — Checks performed on 26 October 2026.
 
 ## Functional results
