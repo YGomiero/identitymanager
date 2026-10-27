@@ -173,6 +173,7 @@ class AuthService
             'profile' => $profile,
             'token' => $token,
             'reason' => $reason,
+            'destination' => (new LoginRedirect())->take((string) $provider['alias']),
             'expires' => time() + 600,
         ]);
 

@@ -4,12 +4,13 @@
   <author>Yann Gomiero</author>
   <creationDate>2026-10</creationDate>
   <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <description>PLG_SYSTEM_IDENTITYMANAGER_XML_DESCRIPTION</description>
   <namespace path="src">Yann\Plugin\System\IdentityManager</namespace>
   <files>
     <folder plugin="identitymanager">services</folder>
     <folder>src</folder>
+    <folder>forms</folder>
     <filename>LICENSE.txt</filename>
     <folder>language</folder>
   </files>

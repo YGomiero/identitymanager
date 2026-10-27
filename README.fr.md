@@ -10,11 +10,13 @@ Connectez-vous à Joomla avec une identité externe, liez un compte existant ou 
 - Interface et documentation en français et en anglais britannique.
 - GitHub et Google via Hybridauth ; fournisseurs OAuth 2.0 / OpenID Connect configurables.
 - Connexion entre Joomla avec code d’autorisation, PKCE et consentement facultatif.
+- Redirection après connexion vers l’accueil, un lien de menu ou une URL du site, réglable par module.
+- Consentement lisible indiquant les informations partagées, sans jargon technique.
 - Favicons des sites liés, logos Google/GitHub intégrés et boutons accessibles.
 - Liaison et révocation des identités, journaux, archive CSV, vidage et durée de conservation.
 - Mise à jour Joomla avec empreintes SHA-256, SHA-384 et SHA-512.
 
-Installez **`pkg_identitymanager-1.0.4.zip`**, pas l’archive du code source proposée par GitHub. Le package contient le composant, quatre plugins, les traductions et les dépendances. Composer n’est pas nécessaire sur le site destinataire.
+Installez **`pkg_identitymanager-1.0.5.zip`**, pas l’archive du code source proposée par GitHub. Le package contient le composant, quatre plugins, les traductions et les dépendances. Composer n’est pas nécessaire sur le site destinataire.
 
 ## Les inscriptions respectent Joomla
 

@@ -10,11 +10,13 @@ Sign in to Joomla with an external identity, link an existing account, or create
 - French and British English interfaces and documentation.
 - GitHub and Google through Hybridauth; configurable OAuth 2.0 / OpenID Connect providers.
 - Joomla-to-Joomla authorization code flow with PKCE and optional consent.
+- Per-module sign-in destination: home page, an existing menu item or a URL on the same site.
+- Plain-language consent describing the information shared with the client.
 - Site favicons, bundled Google/GitHub logos, accessible login buttons.
 - Account linking/revocation, administrator logs, CSV archive, purge and retention settings.
 - Joomla update server with SHA-256, SHA-384 and SHA-512 checksums.
 
-Install **`pkg_identitymanager-1.0.4.zip`**, not GitHub's source-code archive. It contains the component, four plugins, translations and runtime dependencies. Composer is unnecessary on the destination site.
+Install **`pkg_identitymanager-1.0.5.zip`**, not GitHub's source-code archive. It contains the component, four plugins, translations and runtime dependencies. Composer is unnecessary on the destination site.
 
 ## Registration follows Joomla
 

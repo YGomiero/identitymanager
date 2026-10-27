@@ -18,6 +18,7 @@ use Joomla\CMS\User\User;
 use Yann\Component\IdentityManager\Site\Service\AccountLinkService;
 use Yann\Component\IdentityManager\Site\Service\AuthService;
 use Yann\Component\IdentityManager\Site\Service\LogService;
+use Yann\Component\IdentityManager\Site\Service\LoginRedirect;
 use Yann\Component\IdentityManager\Site\Provider\HybridauthProvider;
 
 class AuthController extends BaseController
@@ -42,6 +43,8 @@ class AuthController extends BaseController
             return;
         }
 
+        (new LoginRedirect())->remember($alias, $this->input->getInt('login_module', 0));
+
         if (($provider['type'] ?? '') === 'hybridauth') {
             try {
                 $session = $app->getSession();
@@ -50,6 +53,7 @@ class AuthController extends BaseController
                 $redirectUri = $auth->buildRedirectUri($alias);
                 (new HybridauthProvider())->authenticate($provider, $redirectUri, true);
             } catch (\Throwable $e) {
+                (new LoginRedirect())->take($alias);
                 $logger->write('login_failed', 'error', $e->getMessage(), null, (int) $provider['id'], $provider['name']);
                 $this->redirectError($e->getMessage());
             }
@@ -122,7 +126,7 @@ class AuthController extends BaseController
                     throw new \RuntimeException('COM_IDENTITYMANAGER_ERROR_LOGIN_FAILED');
                 }
                 $auth->clearRelinkReturn();
-                $app->redirect(Route::_('index.php?option=com_identitymanager&view=connections', false));
+                $app->redirect((new LoginRedirect())->finish($alias));
                 return;
             }
 
@@ -168,8 +172,9 @@ class AuthController extends BaseController
                     throw new \RuntimeException('COM_IDENTITYMANAGER_ERROR_LOGIN_FAILED');
                 }
             $auth->clearRelinkReturn();
-            $app->redirect(Route::_('index.php?option=com_identitymanager&view=connections', false));
+            $app->redirect((new LoginRedirect())->finish($alias));
         } catch (\Throwable $e) {
+            (new LoginRedirect())->take($alias);
             $app->getSession()->clear('identitymanager.hybridauth.started.' . $alias);
             $app->getSession()->clear('identitymanager.hybridauth.' . $alias);
             $logger->write('callback_error', 'error', $e->getMessage(), null, $provider ? (int) $provider['id'] : null, $provider['name'] ?? $alias);
@@ -218,7 +223,7 @@ class AuthController extends BaseController
         $session->clear('identitymanager.relink.pending');
 
         $app->enqueueMessage(Text::_('COM_IDENTITYMANAGER_CONNECTION_RELINKED'), 'message');
-        $app->redirect(Route::_('index.php?option=com_identitymanager&view=connections', false));
+        $app->redirect((new LoginRedirect())->resolve($pending['destination'] ?? null));
     }
 
     public function revoke(): void

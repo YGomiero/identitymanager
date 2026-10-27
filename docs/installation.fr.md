@@ -4,13 +4,15 @@
 
 ## Installer ou mettre à jour
 
-Sauvegardez les fichiers et la base. Dans Système → Installation → Extensions, installez le ZIP `pkg_identitymanager-1.0.4.zip`. La première installation active les quatre plugins ; une mise à jour conserve leur état. Tous les fournisseurs et le rôle maître sont désactivés par défaut. Activez uniquement les services configurés.
+Sauvegardez les fichiers et la base. Dans Système → Installation → Extensions, installez le ZIP `pkg_identitymanager-1.0.5.zip`. La première installation active les quatre plugins ; une mise à jour conserve leur état. Tous les fournisseurs et le rôle maître sont désactivés par défaut. Activez uniquement les services configurés.
 
 Un **seul package** contient le composant d’administration/site, le plugin système (boutons), le plugin d’authentification (session Joomla), le catalogue Google et le catalogue Hybridauth. Chaque site choisit son rôle dans sa configuration. Installer le package sur un client ne le transforme pas automatiquement en maître.
 
 Les réglages, fournisseurs, secrets chiffrés et identités liées sont conservés lors d’une mise à jour. La désinstallation supprime les tables de l’extension et leurs données ; exportez les journaux et sauvegardez avant de désinstaller. Les comptes utilisateurs Joomla eux-mêmes restent présents.
 
 Le flux de mise à jour est : `https://github.com/YGomiero/identitymanager-joomla/releases/latest/download/update.xml`. Après publication d’une nouvelle version, utilisez le système de mise à jour normal des extensions Joomla. Ne modifiez pas les ZIP d’une version déjà publiée.
+
+Tant que le dépôt GitHub est privé, les téléchargements nécessitent un accès au dépôt et le flux public de mise à jour Joomla est indisponible. Installez alors le ZIP manuellement.
 
 ## Autoriser les inscriptions
 
@@ -21,6 +23,18 @@ L’adresse e-mail vérifiée est exigée par défaut. Une adresse déjà utilis
 Si Joomla exige une validation par un administrateur, utilisez d’abord son formulaire d’inscription. Si Joomla exige l’auto-activation par e-mail, une identité externe vérifiée remplit cette vérification ; aucune création avec e-mail non vérifié n’est acceptée dans ce mode. Les comptes bloqués ou en attente d’activation ne peuvent pas se connecter.
 
 Si l’adresse e-mail correspond à un compte local existant, le formulaire de connexion du site client s’ouvre directement. Après confirmation de ce compte, la liaison est terminée sans réglage supplémentaire. Une fois connecté, le lien « Mes connexions externes » apparaît dans le module de connexion et sur le profil Joomla ; aucun élément de menu n’est nécessaire. L’accès direct à cette page propose aussi une connexion si le visiteur est déconnecté.
+
+## Choisir la page après connexion
+
+Dans **Contenus → Modules 'Site'**, ouvrez le module **Connexion**, puis l’onglet **Connexions externes**. Le réglage **Après la connexion externe** propose :
+
+- **Page d’accueil** : destination par défaut après connexion ou création autorisée d’un compte.
+- **Lien de menu** : sélectionnez un élément de menu existant et accessible au membre connecté.
+- **URL précise** : indiquez un chemin tel que `/mon-espace` ou une URL complète appartenant au même site. Les paramètres et fragments sont conservés.
+
+Chaque module possède son propre réglage. Une destination indisponible ou une URL extérieure au site renvoie à l’accueil. Le choix est conservé si le parcours demande de confirmer un compte Joomla local existant. L’ajout d’un fournisseur depuis un compte déjà connecté revient à « Mes connexions externes ».
+
+Sur le site maître, le consentement décrit uniquement les informations demandées : identifiant de compte, profil (nom et nom d’utilisateur), adresse e-mail et état de vérification. Le mot de passe n’est jamais partagé avec le site client.
 
 ## GitHub
 
@@ -71,6 +85,6 @@ Les visiteurs gèrent leurs services à `index.php?option=com_identitymanager&vi
 
 Après une déliaison, une authentification externe réussie ouvre le formulaire de connexion du **site client** pour confirmer le compte local d’origine. Ce formulaire ne propose pas de relancer la connexion externe. Un retour répété ou un second clic reprend cette confirmation pendant dix minutes, sans réutiliser le code OAuth ni réactiver la liaison automatiquement. Si une identité a déjà été déliée avant cette protection et que vous êtes déconnecté, utilisez « Mot de passe perdu ? » pour récupérer un accès local ; cela nécessite la réception du courriel de Joomla. Aucun ancien lien n’est réactivé automatiquement. Pour simplement quitter le site et revenir avec le même fournisseur, utilisez « Déconnexion ».
 
-## Passage du prototype 0.1.0 à 1.0.4
+## Passage du prototype 0.1.0 à 1.0.5
 
 La migration ajoute le support PKCE sans remplacer les données. Les anciens codes d’autorisation ne sont plus utilisables : commencez une nouvelle connexion après la mise à jour. Le rôle maître doit être explicitement activé ; mettez les URL en HTTPS, vérifiez l’émetteur, configurez `HS256` pour un maître Identity Manager et un secret d’au moins 32 caractères. Mettez à jour le maître et ses clients ensemble. Réglez les inscriptions Joomla et Identity Manager selon la politique voulue. Ne restaurez pas des données chiffrées sans la clé `secret` Joomla correspondante.

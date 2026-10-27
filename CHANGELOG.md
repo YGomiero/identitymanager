@@ -1,5 +1,11 @@
 # Changelog / Historique
 
+## 1.0.5 — 2026-10-27
+
+- Configure each frontend Login module to return external sign-ins to the home page, an existing menu item or a URL on the same site. Preserve the destination through local-account confirmation; keep provider linking on the connections page.
+- Replace protocol scope names in the consent screen with French and English descriptions of the requested account identifier, profile and email information. Explain that passwords are not shared.
+- Nouvelle redirection configurable dans chaque module de connexion et consentement compréhensible, détaillant les informations demandées en français et en anglais.
+
 ## 1.0.4 — 2026-10-26
 
 - Confirm self-service unlinking with a protected POST. Removing the last enabled provider requires proof of a working local Joomla password, with a profile link to set one or an option to link another provider. Disabled providers do not count; concurrent removals are serialized per user.

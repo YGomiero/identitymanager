@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+  <fields name="params">
+    <fieldset name="identitymanager" label="PLG_SYSTEM_IDENTITYMANAGER_REDIRECT_TAB" addfieldprefix="Joomla\Component\Menus\Administrator\Field">
+      <field name="identitymanager_redirect" type="list" default="home" filter="cmd" label="PLG_SYSTEM_IDENTITYMANAGER_REDIRECT" description="PLG_SYSTEM_IDENTITYMANAGER_REDIRECT_DESC">
+        <option value="home">PLG_SYSTEM_IDENTITYMANAGER_REDIRECT_HOME</option>
+        <option value="menu">PLG_SYSTEM_IDENTITYMANAGER_REDIRECT_MENU</option>
+        <option value="url">PLG_SYSTEM_IDENTITYMANAGER_REDIRECT_URL</option>
+      </field>
+      <field name="identitymanager_menu" type="modal_menu" label="PLG_SYSTEM_IDENTITYMANAGER_REDIRECT_MENU" showon="identitymanager_redirect:menu" select="true" clear="true" disable="separator,heading,alias" filter="integer">
+        <option value="">JOPTION_SELECT_MENU_ITEM</option>
+      </field>
+      <field name="identitymanager_url" type="text" label="PLG_SYSTEM_IDENTITYMANAGER_REDIRECT_URL" description="PLG_SYSTEM_IDENTITYMANAGER_REDIRECT_URL_DESC" showon="identitymanager_redirect:url" filter="string" maxlength="2048" hint="/mon-espace" />
+    </fieldset>
+  </fields>
+</form>

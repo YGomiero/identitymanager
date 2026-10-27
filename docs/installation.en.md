@@ -4,13 +4,15 @@
 
 ## Install and update
 
-Back up files and database, then upload `pkg_identitymanager-1.0.4.zip` through System → Install → Extensions. The first installation enables four plugins; upgrades preserve their enabled state. Providers and the identity-provider role are disabled by default. Enable only configured services.
+Back up files and database, then upload `pkg_identitymanager-1.0.5.zip` through System → Install → Extensions. The first installation enables four plugins; upgrades preserve their enabled state. Providers and the identity-provider role are disabled by default. Enable only configured services.
 
 The **same package** includes the site/administrator component, system buttons plugin, Joomla authentication plugin, Google catalog and Hybridauth catalog. Each site selects its role in configuration. Client installation does not automatically enable the master role.
 
 Updates retain settings, providers, encrypted secrets and account links. Uninstalling deletes the extension's tables and data; export logs and take a backup first. Joomla user accounts remain present.
 
 The package update feed is `https://github.com/YGomiero/identitymanager-joomla/releases/latest/download/update.xml`. Use Joomla's normal extension updater when a new release is available. Published release archives should never be replaced in place.
+
+While the GitHub repository is private, downloads require repository access and the public Joomla update feed is unavailable. Install the ZIP manually during this period.
 
 ## Registration and linking
 
@@ -21,6 +23,18 @@ Verified email is required by default. Matching an existing email does not silen
 When Joomla requires administrator activation, register through its normal form first. When Joomla requires email self-activation, verified external email satisfies the email check; unverified external email cannot create an account in this mode. Blocked accounts and accounts awaiting activation cannot sign in.
 
 When the email matches an existing local account, the client login form opens directly. Once that account is confirmed, linking completes without additional settings. After sign-in, My external connections appears in the login module and Joomla profile; no menu item is required. Opening the connections page as a guest also offers a login link.
+
+## Choose the page after sign-in
+
+Under **Content → Site Modules**, open the **Login** module and its **External sign-in** tab. **After external sign-in** offers:
+
+- **Home page**: the default destination after sign-in or permitted account creation.
+- **Menu item**: select an existing menu item accessible to the signed-in member.
+- **Specific URL**: enter a path such as `/my-account` or a full URL on the same site. Query parameters and fragments are preserved.
+
+Each module has its own setting. An unavailable destination or an off-site URL falls back to the home page. The choice is retained when the flow requires confirmation of an existing local Joomla account. Linking another provider while already signed in returns to My external connections.
+
+On the master site, consent describes only the information requested: account identifier, profile (name and username), email address and verification status. The password is never shared with the client site.
 
 ## GitHub
 

@@ -12,6 +12,8 @@ namespace Yann\Plugin\System\IdentityManager\Extension;
 use Joomla\CMS\Event\Application\AfterDispatchEvent;
 use Joomla\CMS\Event\Application\AfterRenderEvent;
 use Joomla\CMS\Event\Application\BeforeRespondEvent;
+use Joomla\CMS\Event\Model\PrepareFormEvent;
+use Joomla\CMS\Event\Module\AfterRenderModuleEvent;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Router\Route;
 use Joomla\Database\DatabaseAwareTrait;
@@ -28,7 +30,52 @@ final class IdentityManager extends CMSPlugin implements SubscriberInterface
             'onAfterDispatch' => 'onAfterDispatch',
             'onAfterRender' => 'onAfterRender',
             'onBeforeRespond' => 'onBeforeRespond',
+            'onContentPrepareForm' => 'prepareLoginModule',
+            'onAfterRenderModule' => 'renderLoginModule',
         ];
+    }
+
+    /** Extend the native module form without changing Joomla core files. */
+    public function prepareLoginModule(PrepareFormEvent $event): void
+    {
+        $form = $event->getForm();
+        if (!in_array($form->getName(), ['com_modules.module', 'com_config.modules'], true)) { return; }
+        $data = (array) $event->getData();
+        $module = $data['module'] ?? $form->getValue('module');
+        // Joomla rebuilds an empty form while filtering POST, before binding its module data.
+        if (!$module) {
+            $input = $this->getApplication()->getInput();
+            $posted = $input->post->get('jform', [], 'array');
+            $id = (int) ($data['id'] ?? $posted['id'] ?? $input->getInt('id', 0));
+            $module = $id > 0
+                ? $this->getDatabase()->setQuery('SELECT module FROM #__modules WHERE client_id=0 AND id=' . $id)->loadResult()
+                : ($posted['module'] ?? $input->getCmd('module', ''));
+        }
+        if ($module !== 'mod_login') { return; }
+        $this->loadLanguage();
+        $form->loadFile(dirname(__DIR__, 2) . '/forms/login.xml', false);
+    }
+
+    /** Each rendered login module carries its own ID, never an arbitrary return URL. */
+    public function renderLoginModule(AfterRenderModuleEvent $event): void
+    {
+        $app = $this->getApplication();
+        $module = $event->getModule();
+        if (!$app->isClient('site') || $module->module !== 'mod_login' || !$app->getIdentity()->guest
+            || !$this->params->get('inject_buttons', 1) || $this->requiresLocalProof($app)
+            || str_contains($module->content, 'identitymanager-social')) { return; }
+        $buttons = $this->renderButtons((int) $module->id);
+        $module->content = preg_replace_callback('~(<form\\b[^>]*[\\s\\S]*?</form>)~i',
+            static fn($match) => $match[1] . $buttons, $module->content, 1);
+    }
+
+    private function requiresLocalProof($app): bool
+    {
+        $input = $app->getInput();
+        $return = base64_decode((string) $input->get('return', '', 'BASE64'), true);
+        return $input->getCmd('option') === 'com_users' && $input->getCmd('view') === 'login'
+            && is_string($return) && str_contains($return, 'task=auth.resumeRelink')
+            && (bool) (new \Yann\Component\IdentityManager\Site\Service\AuthService())->pendingRelink();
     }
 
     public function onAfterDispatch(AfterDispatchEvent $event): void
@@ -73,10 +120,7 @@ final class IdentityManager extends CMSPlugin implements SubscriberInterface
         }
 
         // This form asks for local proof. Offering the same external login loops back here.
-        $return = base64_decode((string) $input->get('return', '', 'BASE64'), true);
-        if ($option === 'com_users' && $view === 'login'
-            && is_string($return) && str_contains($return, 'task=auth.resumeRelink')
-            && (new \Yann\Component\IdentityManager\Site\Service\AuthService())->pendingRelink()) {
+        if ($this->requiresLocalProof($app)) {
             return;
         }
 
@@ -146,7 +190,7 @@ final class IdentityManager extends CMSPlugin implements SubscriberInterface
         return $body;
     }
 
-    private function renderButtons(): string
+    private function renderButtons(int $moduleId = 0): string
     {
         $db = $this->getDatabase();
         $query = $db->createQuery()
@@ -171,7 +215,8 @@ final class IdentityManager extends CMSPlugin implements SubscriberInterface
         $html .= '<div class="identitymanager-social__buttons">';
 
         foreach ($providers as $provider) {
-            $url = Route::_('index.php?option=com_identitymanager&task=auth.start&provider=' . rawurlencode($provider->alias));
+            $url = Route::_('index.php?option=com_identitymanager&task=auth.start&provider=' . rawurlencode($provider->alias)
+                . ($moduleId > 0 ? '&login_module=' . $moduleId : ''));
             $label = \Joomla\CMS\Language\Text::sprintf('PLG_SYSTEM_IDENTITYMANAGER_CONTINUE', htmlspecialchars($provider->name, ENT_QUOTES, 'UTF-8'));
             if (strtolower((string) ((json_decode($provider->options_json ?: '{}', true)['adapter'] ?? '') ?: $provider->alias)) === 'google') {
                 $label = \Joomla\CMS\Language\Text::_('PLG_SYSTEM_IDENTITYMANAGER_GOOGLE_SIGNIN');
