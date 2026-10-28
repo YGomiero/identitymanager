@@ -40,7 +40,7 @@ if package.exists():
  assert feed is not None and feed.findtext('version')==version, 'Update feed version differs'
  assert feed.findtext('element')=='pkg_identitymanager' and feed.findtext('type')=='package', 'Wrong update target'
  assert feed.findtext('client')=='site', 'Packages use client_id=0; without client=site Joomla cannot match the installed package'
- assert feed.findtext('downloads/downloadurl')==f'https://github.com/YGomiero/identitymanager-joomla/releases/download/{version}/{package.name}', 'Wrong download URL'
+ assert feed.findtext('downloads/downloadurl')==f'https://github.com/YGomiero/identitymanager/releases/download/{version}/{package.name}', 'Wrong download URL'
  for algorithm in ['sha256','sha384','sha512']:
   assert feed.findtext(algorithm)==hashlib.new(algorithm,package.read_bytes()).hexdigest(), f'Wrong {algorithm} checksum'
  sums=(root/'dist/SHA256SUMS').read_text(encoding='ascii').splitlines()

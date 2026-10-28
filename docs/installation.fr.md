@@ -10,7 +10,7 @@ Un **seul package** contient le composant d’administration/site, le plugin sys
 
 Les réglages, fournisseurs, secrets chiffrés et identités liées sont conservés lors d’une mise à jour. La désinstallation supprime les tables de l’extension et leurs données ; exportez les journaux et sauvegardez avant de désinstaller. Les comptes utilisateurs Joomla eux-mêmes restent présents.
 
-Le flux de mise à jour est : `https://github.com/YGomiero/identitymanager-joomla/releases/latest/download/update.xml`. Après publication d’une nouvelle version, utilisez le système de mise à jour normal des extensions Joomla. Ne modifiez pas les ZIP d’une version déjà publiée.
+Le flux de mise à jour est : `https://github.com/YGomiero/identitymanager/releases/latest/download/update.xml`. Après publication d’une nouvelle version, utilisez le système de mise à jour normal des extensions Joomla. Ne modifiez pas les ZIP d’une version déjà publiée.
 
 Le dépôt GitHub, les téléchargements et le flux de mise à jour Joomla sont publics. Aucun compte GitHub n’est nécessaire pour télécharger le paquet installable ou recevoir les mises à jour.
 

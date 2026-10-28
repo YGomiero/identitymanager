@@ -1,6 +1,6 @@
-# Identity Manager pour Joomla
+# Identity Manager
 
-[English](README.md) · [Télécharger](https://github.com/YGomiero/identitymanager-joomla/releases/latest) · [Installation](docs/installation.fr.md) · [Signaler un problème](https://github.com/YGomiero/identitymanager-joomla/issues) · [Sécurité](SECURITY.md)
+[English](README.md) · [Télécharger](https://github.com/YGomiero/identitymanager/releases/latest) · [Installation](docs/installation.fr.md) · [Signaler un problème](https://github.com/YGomiero/identitymanager/issues) · [Sécurité](SECURITY.md)
 
 ![Identity Manager — un package, des identités connectées](docs/identitymanager.svg)
 
@@ -23,6 +23,8 @@ Installez **`pkg_identitymanager-1.0.5.zip`**, pas l’archive du code source pr
 La création exige **deux autorisations** : Utilisateurs → Paramètres → Autoriser l’inscription des utilisateurs, et Identity Manager → Création automatique de comptes. Désactiver l’une suffit à bloquer la création, même si une connexion avait commencé auparavant. Les comptes déjà liés continuent à se connecter. La validation par un administrateur impose une inscription préalable avec Joomla ; l’auto-activation par e-mail exige une adresse vérifiée par le fournisseur externe.
 
 ## Périmètre vérifié
+
+Les [captures de l’interface en anglais](README.md#screenshots) présentent le paramétrage Joomla, la destination après connexion et le consentement sur un site de démonstration local.
 
 La première version a été testée sur Joomla 6.2.0 / PHP 8.3.30 avec une véritable connexion GitHub et des connexions entre Joomla. Google est intégré, mais n’a pas été vérifié avec une application OAuth Google réelle. Une adresse locale en `.test` ne convient pas à l’URL de retour d’un client web Google. WordPress.com figure dans le catalogue Hybridauth ; un WordPress auto-hébergé exige une extension serveur OAuth/OIDC et n’a pas été testé.
 

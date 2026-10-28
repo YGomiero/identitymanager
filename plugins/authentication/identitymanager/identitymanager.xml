@@ -20,6 +20,6 @@
     <language tag="fr-FR">language/fr-FR/plg_authentication_identitymanager.sys.ini</language>
   </languages>
   <authorEmail>extensions@gomiero.me</authorEmail>
-  <authorUrl>https://github.com/YGomiero/identitymanager-joomla</authorUrl>
+  <authorUrl>https://github.com/YGomiero/identitymanager</authorUrl>
   <copyright>(C) 2026 Yann Gomiero</copyright>
 </extension>

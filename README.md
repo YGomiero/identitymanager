@@ -1,6 +1,6 @@
-# Identity Manager for Joomla
+# Identity Manager
 
-[Français](README.fr.md) · [Download](https://github.com/YGomiero/identitymanager-joomla/releases/latest) · [Installation](docs/installation.en.md) · [Report an issue](https://github.com/YGomiero/identitymanager-joomla/issues) · [Security](SECURITY.md)
+[Français](README.fr.md) · [Download](https://github.com/YGomiero/identitymanager/releases/latest) · [Installation](docs/installation.en.md) · [Report an issue](https://github.com/YGomiero/identitymanager/issues) · [Security](SECURITY.md)
 
 ![Identity Manager — one package, connected identities](docs/identitymanager.svg)
 
@@ -21,6 +21,16 @@ Install **`pkg_identitymanager-1.0.5.zip`**, not GitHub's source-code archive. I
 ## Registration follows Joomla
 
 New accounts require **both** Joomla Users → Options → Allow User Registration and Identity Manager → Automatic account creation. Closing either switch prevents external account creation, including when a login started before the change. Existing linked accounts still sign in. Administrator activation requires prior registration through Joomla; email self-activation requires a verified external email.
+
+## Screenshots
+
+English interface on a local demonstration site:
+
+![Guided setup for another Joomla site](docs/screenshots/joomla-provider-setup-en.jpg)
+
+![Choose the destination after external sign-in](docs/screenshots/sign-in-redirect-en.jpg)
+
+![Plain-language consent before sharing identity information](docs/screenshots/consent-en.jpg)
 
 ## Tested scope
 

@@ -4,7 +4,7 @@ import hashlib, io, json, zipfile, xml.etree.ElementTree as ET
 
 ROOT=Path(__file__).resolve().parents[1]
 VERSION=ET.parse(ROOT/'package/pkg_identitymanager.xml').getroot().findtext('version')
-REPO='https://github.com/YGomiero/identitymanager-joomla'
+REPO='https://github.com/YGomiero/identitymanager'
 DIST=ROOT/'dist'
 DIST.mkdir(exist_ok=True)
 

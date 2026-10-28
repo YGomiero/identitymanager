@@ -10,7 +10,7 @@ The **same package** includes the site/administrator component, system buttons p
 
 Updates retain settings, providers, encrypted secrets and account links. Uninstalling deletes the extension's tables and data; export logs and take a backup first. Joomla user accounts remain present.
 
-The package update feed is `https://github.com/YGomiero/identitymanager-joomla/releases/latest/download/update.xml`. Use Joomla's normal extension updater when a new release is available. Published release archives should never be replaced in place.
+The package update feed is `https://github.com/YGomiero/identitymanager/releases/latest/download/update.xml`. Use Joomla's normal extension updater when a new release is available. Published release archives should never be replaced in place.
 
 The GitHub repository, release downloads and Joomla update feed are public. No GitHub account is required to download the installable package or receive updates.
 

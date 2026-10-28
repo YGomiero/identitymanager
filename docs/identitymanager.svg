@@ -1,15 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="512" viewBox="0 0 1024 512" role="img" aria-labelledby="title desc">
-<title id="title">Identity Manager for Joomla</title><desc id="desc">One package connects a Joomla member account with external providers and trusted websites.</desc>
+<title id="title">Identity Manager</title><desc id="desc">One package connects a Joomla member account with external providers and trusted websites.</desc>
 <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#10253f"/><stop offset="1" stop-color="#183f55"/></linearGradient><linearGradient id="card" x2="1" y2="1"><stop stop-color="#58e5c8"/><stop offset="1" stop-color="#4ab9e0"/></linearGradient></defs>
 <rect width="1024" height="512" rx="24" fill="url(#bg)"/>
 <g fill="none" stroke="#426079" stroke-width="1" opacity=".5"><circle cx="744" cy="261" r="200"/><circle cx="744" cy="261" r="157"/><circle cx="744" cy="261" r="112"/></g>
 <g font-family="Arial, sans-serif"><rect x="56" y="55" width="122" height="30" rx="15" fill="#29455e"/><text x="117" y="75" font-size="12" font-weight="700" text-anchor="middle" fill="#d5f8ed" letter-spacing="1.7">JOOMLA 6</text>
 <text x="54" y="159" font-size="50" font-weight="700" fill="#fff">Identity</text><text x="54" y="216" font-size="50" font-weight="700" fill="#fff">Manager</text>
-<text x="57" y="269" font-size="19" fill="#bdd5e1">Un package. Des identités connectées.</text><text x="57" y="301" font-size="16" fill="#95b5c8">One package. Connected identities.</text>
-<g font-size="13" fill="#d7e8ed"><text x="57" y="385">CLIENT + MAÎTRE / MASTER</text><text x="57" y="414">FR / EN</text><text x="139" y="414">OAuth 2.0 · OpenID Connect</text></g>
+<text x="57" y="269" font-size="19" fill="#bdd5e1">One package. Connected identities.</text><text x="57" y="301" font-size="16" fill="#95b5c8">Un package. Des identités connectées.</text>
+<g font-size="13" fill="#d7e8ed"><text x="57" y="385">CLIENT + IDENTITY PROVIDER</text><text x="57" y="414">EN / FR</text><text x="139" y="414">OAuth 2.0 · OpenID Connect</text></g>
 <path d="M685 242L595 145M800 231L882 145M688 300L594 374M806 293L886 374" fill="none" stroke="#62d8cc" stroke-width="3"/>
 <g fill="#f5fafb"><rect x="540" y="99" width="116" height="73" rx="15"/><rect x="827" y="99" width="116" height="73" rx="15"/><rect x="540" y="350" width="116" height="73" rx="15"/><rect x="827" y="350" width="116" height="73" rx="15"/></g>
-<g fill="#17394f" font-size="15" font-weight="700" text-anchor="middle"><text x="598" y="141">Google</text><text x="885" y="141">GitHub</text><text x="598" y="391">Mon site</text><text x="885" y="391">Your site</text></g>
+<g fill="#17394f" font-size="15" font-weight="700" text-anchor="middle"><text x="598" y="141">Google</text><text x="885" y="141">GitHub</text><text x="598" y="391">My site</text><text x="885" y="391">Your site</text></g>
 <rect x="661" y="190" width="165" height="145" rx="28" fill="url(#card)"/>
 <path d="M744 215l37 14v28c0 28-17 45-37 54-20-9-37-26-37-54v-28z" fill="#12354a"/>
 <circle cx="744" cy="248" r="11" fill="#a1f3e0"/><path d="M725 282c1-19 37-19 38 0" fill="#a1f3e0"/>

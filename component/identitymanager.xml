@@ -58,7 +58,7 @@
     </languages>
   </administration>
   <authorEmail>extensions@gomiero.me</authorEmail>
-  <authorUrl>https://github.com/YGomiero/identitymanager-joomla</authorUrl>
+  <authorUrl>https://github.com/YGomiero/identitymanager</authorUrl>
   <copyright>(C) 2026 Yann Gomiero</copyright>
   <scriptfile>script.php</scriptfile>
   <languages folder="site">
