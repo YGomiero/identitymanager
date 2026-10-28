@@ -12,7 +12,7 @@ Les réglages, fournisseurs, secrets chiffrés et identités liées sont conserv
 
 Le flux de mise à jour est : `https://github.com/YGomiero/identitymanager-joomla/releases/latest/download/update.xml`. Après publication d’une nouvelle version, utilisez le système de mise à jour normal des extensions Joomla. Ne modifiez pas les ZIP d’une version déjà publiée.
 
-Tant que le dépôt GitHub est privé, les téléchargements nécessitent un accès au dépôt et le flux public de mise à jour Joomla est indisponible. Installez alors le ZIP manuellement.
+Le dépôt GitHub, les téléchargements et le flux de mise à jour Joomla sont publics. Aucun compte GitHub n’est nécessaire pour télécharger le paquet installable ou recevoir les mises à jour.
 
 ## Autoriser les inscriptions
 

@@ -12,7 +12,7 @@ Updates retain settings, providers, encrypted secrets and account links. Uninsta
 
 The package update feed is `https://github.com/YGomiero/identitymanager-joomla/releases/latest/download/update.xml`. Use Joomla's normal extension updater when a new release is available. Published release archives should never be replaced in place.
 
-While the GitHub repository is private, downloads require repository access and the public Joomla update feed is unavailable. Install the ZIP manually during this period.
+The GitHub repository, release downloads and Joomla update feed are public. No GitHub account is required to download the installable package or receive updates.
 
 ## Registration and linking
 
